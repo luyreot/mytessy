@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -28,11 +29,27 @@ kotlin {
     }
 
     sourceSets {
-
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // Ktor for Android
+            implementation(libs.ktor.client.okhttp)
         }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        iosX64Main.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        iosArm64Main.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        iosSimulatorArm64Main.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -43,6 +60,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // Ktor - shared/common code
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
