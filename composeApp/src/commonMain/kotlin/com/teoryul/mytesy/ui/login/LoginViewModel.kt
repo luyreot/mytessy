@@ -11,11 +11,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
+
     private val _viewState = MutableStateFlow(LoginViewState())
     val viewState: StateFlow<LoginViewState> = _viewState.asStateFlow()
-
-    private val loginRepository = LoginRepository()
 
     fun onEmailChanged(newEmail: String) {
         _viewState.update { it.copy(email = newEmail) }

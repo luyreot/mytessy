@@ -33,21 +33,29 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
-            // Ktor for Android
+            // Ktor
             implementation(libs.ktor.client.okhttp)
+            // Koin
+            implementation(libs.koin.android)
         }
 
         iosMain.dependencies {
+            // Ktor
             implementation(libs.ktor.client.darwin)
+            // Koin
+            implementation(libs.koin.core)
         }
         iosX64Main.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.koin.core)
         }
         iosArm64Main.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.koin.core)
         }
         iosSimulatorArm64Main.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.koin.core)
         }
 
         commonMain.dependencies {
@@ -61,10 +69,13 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            // Ktor - shared/common code
+            // Ktor
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            // Koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -102,4 +113,3 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-
