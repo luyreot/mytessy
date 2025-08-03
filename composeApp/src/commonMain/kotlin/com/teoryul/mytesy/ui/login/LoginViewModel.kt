@@ -3,6 +3,8 @@ package com.teoryul.mytesy.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teoryul.mytesy.data.LoginRepository
+import com.teoryul.mytesy.util.AppLogger.d
+import com.teoryul.mytesy.util.AppLogger.e
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,19 +39,19 @@ class LoginViewModel : ViewModel() {
 
             try {
                 val loginResponse = loginRepository.login(state.email, state.password)
-                println("✅ Login success. Token: ${loginResponse.token}")
+                d("✅ Login success. Token: ${loginResponse.token}")
 
                 val oldLoginResponse = loginRepository.loginOldApp(
                     email = loginResponse.email,
                     password = loginResponse.password,
                     userID = loginResponse.userID
                 )
-                println("✅ Old app session: ${oldLoginResponse.acc_session}")
+                d("✅ Old app session: ${oldLoginResponse.acc_session}")
 
                 // TODO: Store session/token or emit ViewEffect later
 
             } catch (e: Exception) {
-                println("❌ Login failed: ${e.message}")
+                e("❌ Login failed: ${e.message}")
                 // TODO: Emit error ViewEffect later
             } finally {
                 _viewState.update { it.copy(isLoading = false, loginTriggered = false) }
