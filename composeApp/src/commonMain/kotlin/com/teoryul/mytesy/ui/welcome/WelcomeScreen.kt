@@ -66,6 +66,7 @@ fun WelcomeScreen(
                 imageModifier = Modifier
                     .size(144.dp, 44.dp),
                 contentScale = ContentScale.Fit,
+                contentDescription = AppImage.WelcomeLogo.contentDescription,
                 fallbackContent = {
                     Column {
                         Text(
@@ -113,6 +114,7 @@ fun WelcomeScreen(
                     .clip(CircleShape)
                     .background(Color.LightGray),
                 contentScale = ContentScale.Crop,
+                contentDescription = AppImage.WelcomeImage.contentDescription,
                 fallbackBoxModifier = Modifier
                     .size(160.dp)
                     .clip(CircleShape)

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 @Composable
 expect fun loadImageBitmap(image: AppImage): ImageBitmap?
 
-enum class AppImage {
-    WelcomeLogo,
-    WelcomeImage
+enum class AppImage(val contentDescription: String) {
+    WelcomeLogo("Logo Text"),
+    WelcomeImage("Logo")
 }
