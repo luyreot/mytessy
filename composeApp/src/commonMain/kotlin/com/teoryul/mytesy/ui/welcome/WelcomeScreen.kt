@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teoryul.mytesy.ui.common.SafeImage
 import com.teoryul.mytesy.util.AppImage
-import com.teoryul.mytesy.util.loadImageBitmap
+import com.teoryul.mytesy.util.LoadImageBitmap
 import org.koin.compose.koinInject
 
 @Composable
@@ -62,7 +62,7 @@ fun WelcomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SafeImage(
-                imageBitmap = loadImageBitmap(AppImage.WelcomeLogo),
+                imageBitmap = LoadImageBitmap(AppImage.WelcomeLogo),
                 imageModifier = Modifier
                     .size(144.dp, 44.dp),
                 contentScale = ContentScale.Fit,
@@ -108,7 +108,7 @@ fun WelcomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SafeImage(
-                imageBitmap = loadImageBitmap(AppImage.WelcomeImage),
+                imageBitmap = LoadImageBitmap(AppImage.WelcomeImage),
                 imageModifier = Modifier
                     .size(160.dp)
                     .clip(CircleShape)

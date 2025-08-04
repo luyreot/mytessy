@@ -14,7 +14,7 @@ import platform.UIKit.UIImage
 import platform.UIKit.UIImagePNGRepresentation
 
 @Composable
-actual fun loadImageBitmap(image: AppImage): ImageBitmap? {
+actual fun LoadImageBitmap(image: AppImage): ImageBitmap? {
     return getImageBitmap(getImageName(image))
 }
 

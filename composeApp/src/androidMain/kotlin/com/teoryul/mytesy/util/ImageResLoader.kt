@@ -10,7 +10,7 @@ import com.teoryul.mytesy.R
 import com.teoryul.mytesy.util.AppLogger.e
 
 @Composable
-actual fun loadImageBitmap(image: AppImage): ImageBitmap? {
+actual fun LoadImageBitmap(image: AppImage): ImageBitmap? {
     val context = LocalContext.current
     val resId = getImageResId(image)
     return getImageBitmap(context.resources, resId)
