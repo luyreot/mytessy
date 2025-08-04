@@ -2,18 +2,19 @@ package com.teoryul.mytesy.ui
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.teoryul.mytesy.ui.welcome.WelcomeScreen
+import com.teoryul.mytesy.ui.comingsoon.ComingSoonScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        WelcomeScreen(
-            onSignUpClick = {},
-            onSignInClick = {},
-            onLanguageClick = {}
-        )
+        ComingSoonScreen() {}
+//        WelcomeScreen(
+//            onSignUpClick = {},
+//            onSignInClick = {},
+//            onLanguageClick = {}
+//        )
 //        LoginScreen()
 
 //        var showContent by remember { mutableStateOf(false) }
