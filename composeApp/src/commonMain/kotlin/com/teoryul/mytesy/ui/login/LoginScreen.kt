@@ -1,5 +1,12 @@
 package com.teoryul.mytesy.ui.login
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,10 +41,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teoryul.mytesy.util.RegisterBackBlocker
@@ -47,7 +56,7 @@ import org.koin.compose.koinInject
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinInject(),
-    onBackClick: () -> Unit = {} // todo pass actual nav back lambda when wiring navigation
+    onBackClick: () -> Unit = {} // TODO pass actual nav back lambda when wiring navigation
 ) {
     val viewState by viewModel.viewState.collectAsState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -101,6 +110,12 @@ fun LoginScreen(
                     label = { Text("E-mail", color = Color(0xFF5E006C)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    isError = viewState.emailError != null,
+                    supportingText = {
+                        viewState.emailError?.let {
+                            Text(text = it, color = MaterialTheme.colorScheme.error)
+                        }
+                    },
                     enabled = !viewState.isLoading
                 )
 
@@ -132,23 +147,52 @@ fun LoginScreen(
                     fontSize = 14.sp,
                     modifier = Modifier
                         .align(Alignment.End)
-                        .clickable(enabled = !viewState.isLoading) { /* TODO */ }
+                        .clickable(enabled = !viewState.isLoading) {
+                            // TODO implement
+                        }
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
 
+                AnimatedVisibility(
+                    visible = viewState.errorMessage != null,
+                    enter = fadeIn(tween(durationMillis = 100)) +
+                            expandVertically(tween(durationMillis = 100)),
+                    exit = fadeOut(tween(durationMillis = 100)) +
+                            shrinkVertically(tween(durationMillis = 100))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFFFFC107))
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                    ) {
+                        Text(
+                            text = viewState.errorMessage.orEmpty(),
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+
                 Button(
-                    onClick = viewModel::onLoginClicked,
+                    onClick = {
+                        if (viewState.isFormValid && !viewState.isLoading) {
+                            viewModel.onLoginClicked()
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
                     shape = RoundedCornerShape(50),
-                    enabled = !viewState.isLoading,
+                    enabled = viewState.isFormValid,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF5E006C), // todo optimize
-                        disabledContainerColor = Color(0xFF5E006C),
-                        contentColor = Color.White,
-                        disabledContentColor = Color.White
+                        containerColor = Color(0xFF5E006C),
+                        contentColor = Color.White
                     )
                 ) {
                     if (viewState.isLoading) {

@@ -9,7 +9,6 @@ class MyTesyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Init Koin
         initKoin(
             appDeclaration = {
                 androidContext(this@MyTesyApp)

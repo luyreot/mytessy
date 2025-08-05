@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.data
+package com.teoryul.mytesy.data.api
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
@@ -13,10 +13,12 @@ object ApiClient {
     val httpClient: HttpClient by lazy {
         HttpClient(getHttpClientEngine()) {
             install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                })
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    }
+                )
             }
         }
     }

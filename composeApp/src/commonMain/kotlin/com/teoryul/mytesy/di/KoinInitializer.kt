@@ -16,6 +16,7 @@ object KoinInitializer {
                 buildList {
                     add(viewModelModule)
                     add(repositoryModule)
+                    add(useCaseModule)
                     appModule?.let { add(it) }
                 }
             )
