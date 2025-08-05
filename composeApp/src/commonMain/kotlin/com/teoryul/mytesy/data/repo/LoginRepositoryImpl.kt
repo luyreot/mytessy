@@ -1,13 +1,15 @@
 package com.teoryul.mytesy.data.repo
 
 import com.teoryul.mytesy.data.api.ApiClient
-import com.teoryul.mytesy.data.model.login.LoginRequest
-import com.teoryul.mytesy.data.model.login.LoginResponse
-import com.teoryul.mytesy.data.model.oldlogin.OldAppLoginRequest
-import com.teoryul.mytesy.data.model.oldlogin.OldAppLoginResponse
-import com.teoryul.mytesy.data.model.registrationcheck.CheckRegistrationRequest
-import com.teoryul.mytesy.data.model.registrationcheck.CheckRegistrationResponse
+import com.teoryul.mytesy.data.api.model.login.LoginRequest
+import com.teoryul.mytesy.data.api.model.login.LoginResponse
+import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginRequest
+import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginResponse
+import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationRequest
+import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationResponse
+import com.teoryul.mytesy.data.db.SessionDatabase
 import com.teoryul.mytesy.domain.repo.LoginRepository
+import com.teoryul.mytesy.domain.session.SessionData
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -18,7 +20,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
-class LoginRepositoryImpl : LoginRepository {
+class LoginRepositoryImpl(
+    private val sessionDatabase: SessionDatabase
+) : LoginRepository {
 
     override suspend fun checkRegistration(email: String): CheckRegistrationResponse {
         return withContext(Dispatchers.IO) {
@@ -71,6 +75,14 @@ class LoginRepositoryImpl : LoginRepository {
                 }
 
             return@withContext response.body()
+        }
+    }
+
+    override suspend fun saveSession(
+        data: SessionData
+    ) {
+        withContext(Dispatchers.IO) {
+            sessionDatabase.saveSession(data)
         }
     }
 }

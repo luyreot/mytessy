@@ -3,7 +3,6 @@ package com.teoryul.mytesy.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teoryul.mytesy.domain.usecase.LoginUseCase
-import com.teoryul.mytesy.util.AppLogger.d
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,23 +74,12 @@ class LoginViewModel(
 
             when (val result = loginUseCase(email = state.email, password = state.password)) {
                 is LoginUseCase.LoginResult.Fail -> {
-                    _viewState.update {
-                        it.copy(errorMessage = result.message)
-                    }
+                    _viewState.update { it.copy(errorMessage = result.message) }
                 }
 
                 is LoginUseCase.LoginResult.LoginSuccess -> {
-                    d("✅ Login success. Token: ${result.token}")
-                    d("✅ Old app session: ${result.legacySession}")
-                    // TODO: Set errorMessage to null
-                    // TODO: Store session/token or emit ViewEffect later
-                }
-
-                is LoginUseCase.LoginResult.NeedRegistration -> {
-                    // TODO needs more testing
-                    _viewState.update {
-                        it.copy(errorMessage = "Account not found")
-                    }
+                    _viewState.update { it.copy(errorMessage = null) }
+                    // TODO: Emit ViewEffect to go to home screen
                 }
             }
 

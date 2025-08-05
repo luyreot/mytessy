@@ -1,8 +1,9 @@
 package com.teoryul.mytesy.domain.repo
 
-import com.teoryul.mytesy.data.model.login.LoginResponse
-import com.teoryul.mytesy.data.model.oldlogin.OldAppLoginResponse
-import com.teoryul.mytesy.data.model.registrationcheck.CheckRegistrationResponse
+import com.teoryul.mytesy.data.api.model.login.LoginResponse
+import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginResponse
+import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationResponse
+import com.teoryul.mytesy.domain.session.SessionData
 
 interface LoginRepository {
 
@@ -22,4 +23,6 @@ interface LoginRepository {
         userEmail: String?,
         userPass: String?
     ): OldAppLoginResponse
+
+    suspend fun saveSession(data: SessionData)
 }

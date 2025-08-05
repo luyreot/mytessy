@@ -1,5 +1,7 @@
 package com.teoryul.mytesy.di
 
 fun InitKoin() {
-    KoinInitializer.initKoin()
+    KoinInitializer.initKoin(
+        appModule = appModule
+    )
 }

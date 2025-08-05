@@ -14,10 +14,10 @@ object KoinInitializer {
             appDeclaration()
             modules(
                 buildList {
-                    add(viewModelModule)
-                    add(repositoryModule)
-                    add(useCaseModule)
                     appModule?.let { add(it) }
+                    add(dataModule)
+                    add(domainModule)
+                    add(viewModelModule)
                 }
             )
         }

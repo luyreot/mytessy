@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -37,6 +38,8 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             // Koin
             implementation(libs.koin.android)
+            // Sqldelight
+            implementation(libs.sqldelight.android.driver)
         }
 
         iosMain.dependencies {
@@ -44,18 +47,8 @@ kotlin {
             implementation(libs.ktor.client.darwin)
             // Koin
             implementation(libs.koin.core)
-        }
-        iosX64Main.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.koin.core)
-        }
-        iosArm64Main.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.koin.core)
-        }
-        iosSimulatorArm64Main.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.koin.core)
+            // Sqldelight
+            implementation(libs.sqldelight.native.driver)
         }
 
         commonMain.dependencies {
@@ -78,9 +71,19 @@ kotlin {
             implementation(libs.koin.compose)
             // Icons
             implementation(libs.compose.material.icons.extended)
+            // Sqldelight
+            implementation(libs.sqldelight.runtime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName = "com.teoryul.mytesy.db"
         }
     }
 }

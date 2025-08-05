@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.data.model.login
+package com.teoryul.mytesy.data.api.model.login
 
 import kotlinx.serialization.Serializable
 

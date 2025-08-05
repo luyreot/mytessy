@@ -1,6 +1,8 @@
 package com.teoryul.mytesy.domain.usecase
 
 import com.teoryul.mytesy.domain.repo.LoginRepository
+import com.teoryul.mytesy.domain.session.SessionData
+import com.teoryul.mytesy.domain.session.SessionManager
 import com.teoryul.mytesy.util.AppLogger.e
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
@@ -9,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class LoginUseCase(
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val sessionManager: SessionManager
 ) {
 
     suspend operator fun invoke(email: String, password: String): LoginResult {
@@ -43,10 +46,7 @@ class LoginUseCase(
                     ) {
                         return@withContext LoginResult.Fail.ResponseError("Missing parameters")
                     }
-                    return@withContext LoginResult.NeedRegistration(
-                        alt = oldLoginResponse.acc_alt,
-                        session = oldLoginResponse.acc_session
-                    )
+                    return@withContext LoginResult.Fail.AccountNotFound("Account not found")
                 }
 
                 // New login
@@ -77,14 +77,27 @@ class LoginUseCase(
                         else -> LoginResult.Fail.ResponseError(oldLoginResponse.error)
                     }
                 }
-                if (oldLoginResponse.acc_session.isNullOrEmpty()) {
+                if (oldLoginResponse.acc_session.isNullOrEmpty() ||
+                    oldLoginResponse.acc_alt.isNullOrEmpty()
+                ) {
                     return@withContext LoginResult.Fail.ResponseError("Missing parameters")
                 }
 
-                return@withContext LoginResult.LoginSuccess(
+                SessionData(
                     token = loginResponse.token,
-                    legacySession = oldLoginResponse.acc_session
-                )
+                    accSession = oldLoginResponse.acc_session,
+                    accAlt = oldLoginResponse.acc_alt,
+                    userId = loginResponse.userID,
+                    email = loginResponse.email.orEmpty(),
+                    firstName = loginResponse.firstName.orEmpty(),
+                    lastName = loginResponse.lastName.orEmpty(),
+                    lang = loginResponse.lang ?: "en"
+                ).let {
+                    loginRepository.saveSession(it)
+                    sessionManager.currentSession = it
+                }
+
+                return@withContext LoginResult.LoginSuccess
             } catch (e: ClientRequestException) {
                 e("❌ 4xx: ${e.message}")
                 return@withContext LoginResult.Fail.InvalidInput("${e.response.status.value}: ${e::class.simpleName.orEmpty()}")
@@ -104,18 +117,10 @@ class LoginUseCase(
 
     sealed class LoginResult() {
 
-        data class LoginSuccess(
-            val token: String,
-            val legacySession: String
-        ) : LoginResult()
-
-        // TODO needs more testing
-        data class NeedRegistration(
-            val alt: String,
-            val session: String
-        ) : LoginResult()
+        data object LoginSuccess : LoginResult()
 
         sealed class Fail(val message: String) : LoginResult() {
+            data class AccountNotFound(val msg: String) : Fail(msg)
             data class ResponseError(val msg: String) : Fail(msg)
             data class InvalidInput(val msg: String) : Fail(msg)
             data class ServerError(val msg: String) : Fail(msg)

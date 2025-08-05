@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.data.model.registrationcheck
+package com.teoryul.mytesy.data.api.model.registrationcheck
 
 import kotlinx.serialization.Serializable
 

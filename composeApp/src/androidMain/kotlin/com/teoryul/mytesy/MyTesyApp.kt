@@ -2,6 +2,7 @@ package com.teoryul.mytesy
 
 import android.app.Application
 import com.teoryul.mytesy.di.KoinInitializer.initKoin
+import com.teoryul.mytesy.di.appModule
 import org.koin.android.ext.koin.androidContext
 
 class MyTesyApp : Application() {
@@ -12,7 +13,8 @@ class MyTesyApp : Application() {
         initKoin(
             appDeclaration = {
                 androidContext(this@MyTesyApp)
-            }
+            },
+            appModule = appModule
         )
     }
 }
