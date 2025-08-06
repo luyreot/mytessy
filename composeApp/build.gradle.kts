@@ -36,8 +36,6 @@ kotlin {
 
             // Ktor
             implementation(libs.ktor.client.okhttp)
-            // Koin
-            implementation(libs.koin.android)
             // Sqldelight
             implementation(libs.sqldelight.android.driver)
         }
@@ -45,8 +43,6 @@ kotlin {
         iosMain.dependencies {
             // Ktor
             implementation(libs.ktor.client.darwin)
-            // Koin
-            implementation(libs.koin.core)
             // Sqldelight
             implementation(libs.sqldelight.native.driver)
         }
@@ -67,12 +63,13 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             // Koin
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
+            api(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
             // Icons
             implementation(libs.compose.material.icons.extended)
             // Sqldelight
             implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

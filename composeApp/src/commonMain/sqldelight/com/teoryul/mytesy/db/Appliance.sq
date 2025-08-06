@@ -1,0 +1,88 @@
+CREATE TABLE appliance (
+    device_serial TEXT NOT NULL PRIMARY KEY,
+    url TEXT,
+    id TEXT,
+    group_name TEXT,
+    short_name TEXT,
+    description TEXT,
+    erp TEXT,
+    activity INTEGER,
+    online INTEGER,
+    set_mc INTEGER,
+
+    -- Flattened fields from DeviceStatus
+    status_id TEXT,
+    status_text TEXT,
+    status_tmpC TEXT,
+    status_tmpT TEXT,
+    status_pwr TEXT,
+    status_mode TEXT,
+    status_err TEXT,
+    status_wsw TEXT,
+    status_ht TEXT,
+    status_tz TEXT,
+    status_wSSID TEXT,
+    status_wIP TEXT,
+    status_date TEXT,
+    status_prfl TEXT,
+    status_extr TEXT,
+    status_hsw TEXT,
+    status_reset TEXT,
+    status_wi TEXT,
+    status_wcntr TEXT,
+    status_bst TEXT,
+    status_vac TEXT,
+    status_prgVac TEXT,
+    status_prgP1MO TEXT,
+    status_prgP1TU TEXT,
+    status_prgP1WE TEXT,
+    status_prgP1TH TEXT,
+    status_prgP1FR TEXT,
+    status_prgP1SA TEXT,
+    status_prgP1SU TEXT,
+    status_prgP2MO TEXT,
+    status_prgP2TU TEXT,
+    status_prgP2WE TEXT,
+    status_prgP2TH TEXT,
+    status_prgP2FR TEXT,
+    status_prgP2SA TEXT,
+    status_prgP2SU TEXT,
+    status_prgP3MO TEXT,
+    status_prgP3TU TEXT,
+    status_prgP3WE TEXT,
+    status_prgP3TH TEXT,
+    status_prgP3FR TEXT,
+    status_prgP3SA TEXT,
+    status_prgP3SU TEXT,
+    status_pwcalc TEXT,
+    status_pwc_t TEXT,
+    status_pwc_u_date TEXT,
+    status_pwc_u_timestamp TEXT,
+    status_pwc_u_utc TEXT,
+    status_wtstp TEXT,
+    status_wup TEXT,
+    status_wdBm TEXT
+);
+
+getAllAppliances:
+SELECT * FROM appliance;
+
+insertOrReplaceAppliance:
+INSERT OR REPLACE INTO appliance (
+    device_serial, url, id, group_name, short_name, description, erp, activity, online, set_mc,
+    status_id, status_text, status_tmpC, status_tmpT, status_pwr, status_mode, status_err, status_wsw,
+    status_ht, status_tz, status_wSSID, status_wIP, status_date, status_prfl, status_extr,
+    status_hsw, status_reset, status_wi, status_wcntr, status_bst, status_vac, status_prgVac,
+    status_prgP1MO, status_prgP1TU, status_prgP1WE, status_prgP1TH, status_prgP1FR, status_prgP1SA,
+    status_prgP1SU, status_prgP2MO, status_prgP2TU, status_prgP2WE, status_prgP2TH, status_prgP2FR,
+    status_prgP2SA, status_prgP2SU, status_prgP3MO, status_prgP3TU, status_prgP3WE, status_prgP3TH,
+    status_prgP3FR, status_prgP3SA, status_prgP3SU, status_pwcalc, status_pwc_t, status_pwc_u_date,
+    status_pwc_u_timestamp, status_pwc_u_utc, status_wtstp, status_wup, status_wdBm
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteAllAppliances:
+DELETE FROM appliance;
+
+deleteApplianceBySerial:
+DELETE FROM appliance WHERE device_serial = ?;

@@ -5,6 +5,7 @@ CREATE TABLE session (
         acc_alt TEXT NOT NULL,
         user_id INTEGER NOT NULL,
         email TEXT NOT NULL,
+        password TEXT NOT NULL,
         first_name TEXT NOT NULL,
         last_name TEXT NOT NULL,
         lang TEXT NOT NULL
@@ -15,9 +16,9 @@ SELECT * FROM session LIMIT 1;
 
 insertOrReplace:
 INSERT OR REPLACE INTO session(
- id, token, acc_session, acc_alt, user_id, email, first_name, last_name, lang
+id, token, acc_session, acc_alt, user_id, email, password, first_name, last_name, lang
 )
-VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteAll:
 DELETE FROM session;

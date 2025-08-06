@@ -87,8 +87,9 @@ class LoginUseCase(
                     token = loginResponse.token,
                     accSession = oldLoginResponse.acc_session,
                     accAlt = oldLoginResponse.acc_alt,
-                    userId = loginResponse.userID,
+                    userId = loginResponse.userID.toLong(),
                     email = loginResponse.email.orEmpty(),
+                    password = loginResponse.password.orEmpty(),
                     firstName = loginResponse.firstName.orEmpty(),
                     lastName = loginResponse.lastName.orEmpty(),
                     lang = loginResponse.lang ?: "en"

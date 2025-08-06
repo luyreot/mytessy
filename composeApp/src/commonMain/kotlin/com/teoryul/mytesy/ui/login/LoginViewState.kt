@@ -7,5 +7,6 @@ data class LoginViewState(
     val loginTriggered: Boolean = false,
     val errorMessage: String? = null,
     val isFormValid: Boolean = false,
-    val emailError: String? = null
+    val emailError: String? = null,
+    val showDelayedLoadingMessage: Boolean = false
 )

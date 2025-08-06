@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
@@ -43,20 +44,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teoryul.mytesy.util.RegisterBackBlocker
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = koinInject(),
+    viewModel: LoginViewModel = koinViewModel(),
     onForgotPasswordClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLoginSuccess: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -64,6 +68,14 @@ fun LoginScreen(
     LaunchedEffect(viewState.loginTriggered) {
         if (viewState.loginTriggered) {
             viewModel.performLoginIfTriggered()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEffect.collect { effect ->
+            when (effect) {
+                is LoginViewEffect.NavigateToHome -> onLoginSuccess()
+            }
         }
     }
 
@@ -114,7 +126,11 @@ fun LoginScreen(
                             Text(text = it, color = MaterialTheme.colorScheme.error)
                         }
                     },
-                    enabled = !viewState.isLoading
+                    enabled = !viewState.isLoading,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -127,6 +143,10 @@ fun LoginScreen(
                     singleLine = true,
                     enabled = !viewState.isLoading,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(
@@ -202,6 +222,22 @@ fun LoginScreen(
                     } else {
                         Text("Log in", color = Color.White)
                     }
+                }
+
+                AnimatedVisibility(
+                    visible = viewState.isLoading && viewState.showDelayedLoadingMessage,
+                    enter = fadeIn(tween(150)),
+                    exit = fadeOut(tween(150))
+                ) {
+                    Text(
+                        text = "Login is taking longer than usual… Please wait.",
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
             }
         }

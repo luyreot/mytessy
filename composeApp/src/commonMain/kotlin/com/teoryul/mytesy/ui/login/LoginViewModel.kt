@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.teoryul.mytesy.domain.usecase.LoginUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +19,9 @@ class LoginViewModel(
 
     private val _viewState = MutableStateFlow(LoginViewState())
     val viewState: StateFlow<LoginViewState> = _viewState.asStateFlow()
+
+    private val _viewEffect = MutableSharedFlow<LoginViewEffect>()
+    val viewEffect: SharedFlow<LoginViewEffect> = _viewEffect
 
     private var emailValidationJob: Job? = null
 
@@ -70,20 +75,33 @@ class LoginViewModel(
         if (!state.loginTriggered) return
 
         viewModelScope.launch {
-            _viewState.update { it.copy(isLoading = true) }
+            _viewState.update { it.copy(isLoading = true, showDelayedLoadingMessage = false) }
+
+            val delayJob = launch {
+                delay(3500)
+                _viewState.update { it.copy(showDelayedLoadingMessage = true) }
+            }
 
             when (val result = loginUseCase(email = state.email, password = state.password)) {
                 is LoginUseCase.LoginResult.Fail -> {
+                    delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = result.message) }
                 }
 
                 is LoginUseCase.LoginResult.LoginSuccess -> {
+                    delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = null) }
-                    // TODO: Emit ViewEffect to go to home screen
+                    _viewEffect.emit(LoginViewEffect.NavigateToHome)
                 }
             }
 
-            _viewState.update { it.copy(isLoading = false, loginTriggered = false) }
+            _viewState.update {
+                it.copy(
+                    isLoading = false,
+                    loginTriggered = false,
+                    showDelayedLoadingMessage = false
+                )
+            }
         }
     }
 
