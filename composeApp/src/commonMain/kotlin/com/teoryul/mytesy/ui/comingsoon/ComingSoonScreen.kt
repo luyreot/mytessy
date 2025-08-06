@@ -1,12 +1,10 @@
 package com.teoryul.mytesy.ui.comingsoon
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -25,13 +23,10 @@ import androidx.compose.ui.unit.dp
 fun ComingSoonScreen(
     title: String = "Coming Soon",
     message: String = "This feature is currently in development.",
-    onBack: () -> Unit
+    onBackClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize()
-            .systemBarsPadding() // TODO Temporarily handle edge-to-edge
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -58,7 +53,7 @@ fun ComingSoonScreen(
         }
 
         IconButton(
-            onClick = onBack,
+            onClick = onBackClick,
             modifier = Modifier.align(Alignment.TopStart)
         ) {
             Icon(

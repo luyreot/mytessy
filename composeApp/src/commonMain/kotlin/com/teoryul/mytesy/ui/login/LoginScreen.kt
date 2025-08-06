@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -56,7 +55,8 @@ import org.koin.compose.koinInject
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = koinInject(),
-    onBackClick: () -> Unit = {} // TODO pass actual nav back lambda when wiring navigation
+    onForgotPasswordClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -70,9 +70,7 @@ fun LoginScreen(
     RegisterBackBlocker(viewState.isLoading)
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding() // TODO Temporarily handle edge-to-edge
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -148,7 +146,7 @@ fun LoginScreen(
                     modifier = Modifier
                         .align(Alignment.End)
                         .clickable(enabled = !viewState.isLoading) {
-                            // TODO implement
+                            if (!viewState.isLoading) onForgotPasswordClick()
                         }
                 )
 
