@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import com.teoryul.mytesy.ui.AppViewModel
 import com.teoryul.mytesy.ui.addappliance.AddApplianceScreen
 import com.teoryul.mytesy.ui.comingsoon.ComingSoonScreen
 import com.teoryul.mytesy.ui.home.HomeScreen
+import com.teoryul.mytesy.ui.lifecycle.WithRetainedTabViewModelStore
 import com.teoryul.mytesy.ui.lifecycle.WithScreenViewModelStore
 import com.teoryul.mytesy.ui.login.LoginScreen
 import com.teoryul.mytesy.ui.notifications.NotificationsScreen
@@ -42,6 +44,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AppNavigation(
     viewModel: AppViewModel = koinViewModel()
 ) {
+    val stateHolder = rememberSaveableStateHolder()
+
     var screenBackStack by rememberSaveable(stateSaver = ScreenBackStackSaver) {
         mutableStateOf(listOf(Screen.Welcome))
     }
@@ -136,6 +140,7 @@ fun AppNavigation(
                     }
                 ) { screen ->
                     val viewModelStoreKey: String = screen::class.simpleName.toString()
+                    val stateHolderKey = "tab:$viewModelStoreKey"
                     when (screen) {
                         is Screen.Welcome -> WithScreenViewModelStore(key = viewModelStoreKey) {
                             WelcomeScreen(
@@ -160,28 +165,40 @@ fun AppNavigation(
                             )
                         }
 
-                        is Screen.Home -> WithScreenViewModelStore(key = viewModelStoreKey) {
-                            HomeScreen(
-                                onAddApplianceClick = { navigateTo(Screen.AddAppliance) }
-                            )
+                        is Screen.Home -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                HomeScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    onAddApplianceClick = { navigateTo(Screen.AddAppliance) }
+                                )
+                            }
                         }
 
-                        is Screen.AddAppliance -> WithScreenViewModelStore(key = viewModelStoreKey) {
-                            AddApplianceScreen(
-                                onBackClick = { navigateBack() }
-                            )
+                        is Screen.AddAppliance -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                AddApplianceScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    onBackClick = { navigateBack() }
+                                )
+                            }
                         }
 
-                        is Screen.Notifications -> WithScreenViewModelStore(key = viewModelStoreKey) {
-                            NotificationsScreen(
-                                onBackClick = { navigateBack() }
-                            )
+                        is Screen.Notifications -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                NotificationsScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    onBackClick = { navigateBack() }
+                                )
+                            }
                         }
 
-                        is Screen.Settings -> WithScreenViewModelStore(key = viewModelStoreKey) {
-                            SettingsScreen(
-                                onBackClick = { navigateBack() }
-                            )
+                        is Screen.Settings -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                SettingsScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    onBackClick = { navigateBack() }
+                                )
+                            }
                         }
                     }
                 }

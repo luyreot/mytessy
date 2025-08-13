@@ -26,6 +26,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
+    stateHolderKey: String,
     viewModel: HomeViewModel = koinViewModel(),
     onAddApplianceClick: () -> Unit
 ) {

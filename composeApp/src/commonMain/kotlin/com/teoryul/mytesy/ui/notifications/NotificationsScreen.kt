@@ -6,6 +6,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NotificationsScreen(
+    stateHolderKey: String,
     viewModel: NotificationsViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {

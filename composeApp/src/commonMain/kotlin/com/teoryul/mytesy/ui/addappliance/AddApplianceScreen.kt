@@ -6,6 +6,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AddApplianceScreen(
+    stateHolderKey: String,
     viewModel: AddApplianceViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {

@@ -29,7 +29,6 @@ class ScreenStoresVM : ViewModel() {
     }
 
     override fun onCleared() {
-        // Cleanup if the Activity is truly finishing
         stores.values.forEach { it.clear() }
         stores.clear()
     }

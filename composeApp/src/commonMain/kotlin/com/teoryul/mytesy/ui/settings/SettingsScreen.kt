@@ -6,6 +6,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingsScreen(
+    stateHolderKey: String,
     viewModel: SettingsViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
