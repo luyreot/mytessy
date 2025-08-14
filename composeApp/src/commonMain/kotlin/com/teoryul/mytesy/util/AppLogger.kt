@@ -1,37 +1,90 @@
 package com.teoryul.mytesy.util
 
-object AppLogger {
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-    var isEnabled = true // TODO disable for release builds
+object AppLogger : AppLoggerDefinition, KoinComponent {
 
-    fun d(message: String) {
-        if (isEnabled) logDebug(">>>", message)
+    private val logger: AppLoggerDefinition by inject()
+
+    override fun d(message: String) {
+        logger.d(message)
     }
 
-    fun d(tag: String, message: String) {
-        if (isEnabled) logDebug(tag, message)
+    override fun d(tag: String, message: String) {
+        logger.d(tag, message)
     }
 
-    fun i(message: String) {
-        if (isEnabled) logInfo(">>>", message)
+    override fun i(message: String) {
+        logger.i(message)
     }
 
-    fun i(tag: String, message: String) {
-        if (isEnabled) logInfo(tag, message)
+    override fun i(tag: String, message: String) {
+        logger.i(tag, message)
     }
 
-    fun e(throwable: Throwable?) {
-        if (isEnabled) logError(">>>", "", throwable)
+    override fun e(throwable: Throwable?) {
+        logger.e(throwable)
     }
 
-    fun e(message: String, throwable: Throwable? = null) {
-        if (isEnabled) logError(">>>", message, throwable)
+    override fun e(message: String, throwable: Throwable?) {
+        logger.e(message, throwable)
     }
 
-    fun e(tag: String, message: String, throwable: Throwable? = null) {
-        if (isEnabled) logError(tag, message, throwable)
+    override fun e(tag: String, message: String, throwable: Throwable?) {
+        logger.e(tag, message, throwable)
+    }
+}
+
+interface AppLoggerDefinition {
+    fun d(message: String)
+    fun d(tag: String, message: String)
+    fun i(message: String)
+    fun i(tag: String, message: String)
+    fun e(throwable: Throwable?)
+    fun e(message: String, throwable: Throwable? = null)
+    fun e(tag: String, message: String, throwable: Throwable? = null)
+}
+
+class AppLoggerDebug : AppLoggerDefinition {
+
+    override fun d(message: String) {
+        logDebug(">>>", message)
     }
 
+    override fun d(tag: String, message: String) {
+        logDebug(tag, message)
+    }
+
+    override fun i(message: String) {
+        logInfo(">>>", message)
+    }
+
+    override fun i(tag: String, message: String) {
+        logInfo(tag, message)
+    }
+
+    override fun e(throwable: Throwable?) {
+        logError(">>>", "", throwable)
+    }
+
+    override fun e(message: String, throwable: Throwable?) {
+        logError(">>>", message, throwable)
+    }
+
+    override fun e(tag: String, message: String, throwable: Throwable?) {
+        logError(tag, message, throwable)
+    }
+}
+
+class AppLoggerRelease : AppLoggerDefinition {
+    override fun d(message: String) {}
+    override fun d(tag: String, message: String) {}
+    override fun i(message: String) {}
+    override fun i(tag: String, message: String) {}
+    override fun e(throwable: Throwable?) {}
+    override fun e(message: String, throwable: Throwable?) {}
+    override fun e(tag: String, message: String, throwable: Throwable?) {}
 }
 
 expect fun logDebug(tag: String, message: String)

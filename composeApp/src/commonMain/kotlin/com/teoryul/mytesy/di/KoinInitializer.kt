@@ -15,6 +15,7 @@ object KoinInitializer {
             modules(
                 buildList {
                     appModule?.let { add(it) }
+                    add(utilModule)
                     add(dataModule)
                     add(domainModule)
                     add(viewModelModule)
