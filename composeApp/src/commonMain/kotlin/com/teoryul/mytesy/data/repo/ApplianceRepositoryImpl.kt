@@ -19,26 +19,8 @@ class ApplianceRepositoryImpl(
         }
     }
 
-    override suspend fun refreshAppliances(
-        alt: String,
-        currentSession: String?,
-        phpSessId: String,
-        lang: String,
-        lastLoginUsername: String,
-        userEmail: String,
-        userID: Long,
-        userPass: String
-    ) {
-        val response = api.getOldAppDevices(
-            alt = alt,
-            currentSession = currentSession,
-            phpSessId = phpSessId,
-            lang = lang,
-            lastLoginUsername = lastLoginUsername,
-            userEmail = userEmail,
-            userID = userID,
-            userPass = userPass
-        )
+    override suspend fun refreshAppliances() {
+        val response = api.getOldAppDevices()
 
         if (response.device.isNullOrEmpty()) {
             applianceTable.deleteAllAppliances()

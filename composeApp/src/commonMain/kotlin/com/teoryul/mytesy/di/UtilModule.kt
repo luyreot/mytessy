@@ -2,6 +2,7 @@ package com.teoryul.mytesy.di
 
 import com.teoryul.mytesy.util.AppLoggerDebug
 import com.teoryul.mytesy.util.AppLoggerDefinition
+import com.teoryul.mytesy.util.AppScopes
 import org.koin.dsl.module
 
 val utilModule = module {
@@ -9,5 +10,5 @@ val utilModule = module {
     single<AppLoggerDefinition> { AppLoggerDebug() }
     //single<AppLoggerDefinition> { AppLoggerRelease() }
 
-
+    single { AppScopes() }
 }

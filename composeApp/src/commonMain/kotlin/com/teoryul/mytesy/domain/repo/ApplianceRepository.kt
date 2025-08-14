@@ -14,16 +14,7 @@ interface ApplianceRepository {
      * Fetches appliances from the backend and updates the local database.
      * If the backend returns an empty list, clears the local appliance data.
      */
-    suspend fun refreshAppliances(
-        alt: String,
-        currentSession: String?,
-        phpSessId: String,
-        lang: String,
-        lastLoginUsername: String,
-        userEmail: String,
-        userID: Long,
-        userPass: String
-    )
+    suspend fun refreshAppliances()
 
     /**
      * Deletes a single appliance from the local database using its serial.

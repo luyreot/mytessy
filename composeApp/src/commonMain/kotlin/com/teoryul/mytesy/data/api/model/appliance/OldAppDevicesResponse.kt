@@ -8,6 +8,9 @@ data class OldAppDevicesResponse(
     val device: Map<String, OldApplianceResponse>? = null
 )
 
+/**
+ * When device is offline both deviceActivity and deviceOnline are 0.
+ */
 @Serializable
 data class OldApplianceResponse(
     @SerialName("URL") val url: String,
@@ -17,8 +20,8 @@ data class OldApplianceResponse(
     @SerialName("DeviceShortName") val deviceShortName: String? = null,
     @SerialName("DeviceDescription") val deviceDescription: String? = null,
     @SerialName("DeviceERP") val deviceErp: String? = null,
-    @SerialName("DeviceActivity") val deviceActivity: Int,
-    @SerialName("DeviceOnline") val deviceOnline: Int,
+    @SerialName("DeviceActivity") val deviceActivity: Int, // 0, 1
+    @SerialName("DeviceOnline") val deviceOnline: Int, // 0, 1
     @SerialName("DeviceStatus") val deviceStatus: OldDeviceStatusResponse,
     @SerialName("SetMC") val setMc: Int? = null
 )

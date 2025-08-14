@@ -8,6 +8,7 @@ import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginRequest
 import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginResponse
 import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationRequest
 import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationResponse
+import com.teoryul.mytesy.domain.session.SessionProvider
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -18,7 +19,8 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class ApiService(
-    private val client: ApiClient
+    private val client: ApiClient,
+    private val sessionProvider: SessionProvider
 ) {
 
     suspend fun checkRegistration(
@@ -66,24 +68,18 @@ class ApiService(
     }
 
     suspend fun getOldAppDevices(
-        alt: String,
-        currentSession: String?,
-        phpSessId: String,
-        lang: String,
-        lastLoginUsername: String,
-        userEmail: String,
-        userID: Long,
-        userPass: String
     ): OldAppDevicesResponse = withContext(Dispatchers.IO) {
+        val session = sessionProvider.require()
+
         val request = OldAppDevicesRequest(
-            ALT = alt,
-            CURRENT_SESSION = currentSession,
-            PHPSESSID = phpSessId,
-            lang = lang,
-            last_login_username = lastLoginUsername,
-            userEmail = userEmail,
-            userID = userID,
-            userPass = userPass
+            ALT = session.accAlt,
+            CURRENT_SESSION = null,
+            PHPSESSID = session.accSession,
+            lang = session.lang,
+            last_login_username = session.email,
+            userEmail = session.email,
+            userID = session.userId,
+            userPass = session.password
         )
 
         client.httpClient.post("https://ad.mytesy.com/rest/old-app-devices") {

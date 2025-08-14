@@ -1,14 +1,15 @@
 package com.teoryul.mytesy.domain.usecase
 
 import com.teoryul.mytesy.domain.appliance.ApplianceEntity
+import com.teoryul.mytesy.domain.model.ErrorResult
+import com.teoryul.mytesy.domain.model.toErrorResult
 import com.teoryul.mytesy.domain.repo.ApplianceRepository
-import com.teoryul.mytesy.domain.session.SessionTable
+import com.teoryul.mytesy.util.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class ApplianceUseCase(
-    private val sessionTable: SessionTable,
     private val applianceRepository: ApplianceRepository
 ) {
 
@@ -16,29 +17,15 @@ class ApplianceUseCase(
         return applianceRepository.observeAppliances()
     }
 
-    // todo
-    suspend fun syncAppliances(): Result<Unit> {
+    suspend fun syncAppliances(): ApplianceResult {
         return withContext(Dispatchers.Default) {
-            val session = sessionTable.loadSession()
-
-            if (session == null) {
-                return@withContext Result.failure(IllegalStateException("No session available"))
-            }
-
             return@withContext try {
-                applianceRepository.refreshAppliances(
-                    alt = session.accAlt,
-                    currentSession = null,
-                    phpSessId = session.accSession,
-                    lang = session.lang,
-                    lastLoginUsername = session.email,
-                    userEmail = session.email,
-                    userID = session.userId,
-                    userPass = session.password
-                )
-                Result.success(Unit)
-            } catch (e: Exception) {
-                Result.failure(e)
+                applianceRepository.refreshAppliances()
+                ApplianceResult.Success
+            } catch (t: Throwable) {
+                val error = t.toErrorResult()
+                AppLogger.e(error.message)
+                ApplianceResult.Fail(error)
             }
         }
     }
@@ -53,5 +40,13 @@ class ApplianceUseCase(
         withContext(Dispatchers.Default) {
             applianceRepository.deleteAllAppliances()
         }
+    }
+
+
+    sealed class ApplianceResult {
+
+        data object Success : ApplianceResult()
+
+        data class Fail(val error: ErrorResult) : ApplianceResult()
     }
 }

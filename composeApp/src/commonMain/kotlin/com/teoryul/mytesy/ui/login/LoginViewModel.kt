@@ -88,7 +88,7 @@ class LoginViewModel(
                     _viewState.update { it.copy(errorMessage = result.message) }
                 }
 
-                is LoginUseCase.LoginResult.LoginSuccess -> {
+                is LoginUseCase.LoginResult.Success -> {
                     delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = null) }
                     _viewEffect.emit(LoginViewEffect.NavigateToHome)
