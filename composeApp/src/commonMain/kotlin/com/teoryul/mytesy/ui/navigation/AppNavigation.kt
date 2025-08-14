@@ -47,7 +47,7 @@ fun AppNavigation(
     val stateHolder = rememberSaveableStateHolder()
 
     var screenBackStack by rememberSaveable(stateSaver = ScreenBackStackSaver) {
-        mutableStateOf(listOf(Screen.Welcome))
+        mutableStateOf(listOf<Screen>(Screen.Welcome))
     }
 
     val currentScreen = screenBackStack.last()
@@ -177,8 +177,7 @@ fun AppNavigation(
                         is Screen.AddAppliance -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 AddApplianceScreen(
-                                    stateHolderKey = stateHolderKey,
-                                    onBackClick = { navigateBack() }
+                                    stateHolderKey = stateHolderKey
                                 )
                             }
                         }
@@ -186,8 +185,7 @@ fun AppNavigation(
                         is Screen.Notifications -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 NotificationsScreen(
-                                    stateHolderKey = stateHolderKey,
-                                    onBackClick = { navigateBack() }
+                                    stateHolderKey = stateHolderKey
                                 )
                             }
                         }
@@ -195,8 +193,7 @@ fun AppNavigation(
                         is Screen.Settings -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 SettingsScreen(
-                                    stateHolderKey = stateHolderKey,
-                                    onBackClick = { navigateBack() }
+                                    stateHolderKey = stateHolderKey
                                 )
                             }
                         }
