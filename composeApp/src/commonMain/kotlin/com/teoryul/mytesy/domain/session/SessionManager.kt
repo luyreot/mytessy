@@ -12,7 +12,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class SessionManager(
-    private val appScope: CoroutineScope,
+    appScope: CoroutineScope,
     private val sessionTable: SessionTable
 ) : SessionProvider {
 

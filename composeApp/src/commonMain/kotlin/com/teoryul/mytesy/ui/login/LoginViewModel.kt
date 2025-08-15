@@ -85,6 +85,11 @@ class LoginViewModel(
             when (val result = loginUseCase(email = state.email, password = state.password)) {
                 is LoginUseCase.LoginResult.Fail -> {
                     delayJob.cancel()
+                    _viewState.update { it.copy(errorMessage = result.error.message) }
+                }
+
+                is LoginUseCase.LoginResult.AccountNotFound -> {
+                    delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = result.message) }
                 }
 

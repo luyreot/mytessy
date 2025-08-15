@@ -113,7 +113,7 @@ class LoginUseCase(
 
         data object Success : LoginResult()
 
-        data class AccountNotFound(val msg: String) : LoginResult()
+        data class AccountNotFound(val message: String) : LoginResult()
 
         data class Fail(val error: ErrorResult) : LoginResult()
     }
