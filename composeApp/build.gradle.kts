@@ -33,6 +33,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.lifecycle.process)
 
             // Ktor
             implementation(libs.ktor.client.okhttp)

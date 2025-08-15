@@ -1,6 +1,6 @@
 package com.teoryul.mytesy.di
 
-import com.teoryul.mytesy.ui.AppViewModel
+import com.teoryul.mytesy.ui.navigation.AppViewModel
 import com.teoryul.mytesy.ui.addappliance.AddApplianceViewModel
 import com.teoryul.mytesy.ui.home.HomeViewModel
 import com.teoryul.mytesy.ui.login.LoginViewModel

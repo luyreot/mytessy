@@ -23,7 +23,6 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import com.teoryul.mytesy.ui.AppViewModel
 import com.teoryul.mytesy.ui.addappliance.AddApplianceScreen
 import com.teoryul.mytesy.ui.comingsoon.ComingSoonScreen
 import com.teoryul.mytesy.ui.home.HomeScreen
