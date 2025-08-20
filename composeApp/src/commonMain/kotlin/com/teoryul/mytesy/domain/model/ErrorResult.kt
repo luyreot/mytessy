@@ -1,9 +1,8 @@
 package com.teoryul.mytesy.domain.model
 
-import com.teoryul.mytesy.domain.session.UnauthenticatedException
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.ServerResponseException
-import io.ktor.utils.io.errors.IOException
+interface ErrorResultMapper {
+    fun map(t: Throwable): ErrorResult
+}
 
 sealed class ErrorResult(open val message: String) {
 
@@ -25,22 +24,4 @@ sealed class ErrorResult(open val message: String) {
     data class Unknown(override val message: String) : ErrorResult(message)
 }
 
-fun Throwable.toErrorResult(): ErrorResult = when (this) {
-    is UnauthenticatedException -> ErrorResult.Unauthenticated(message.orEmpty())
-
-    is ClientRequestException -> ErrorResult.InvalidInput(
-        "${response.status.value}: ${this::class.simpleName.orEmpty()}"
-    )
-
-    is ServerResponseException -> ErrorResult.ServerError(
-        "${response.status.value}: ${this::class.simpleName.orEmpty()}"
-    )
-
-    is IOException -> ErrorResult.ConnectionError(
-        "Connection error: ${this::class.simpleName.orEmpty()}"
-    )
-
-    else -> ErrorResult.Unknown(
-        "Unknown error: ${this::class.simpleName.orEmpty()}"
-    )
-}
+fun Throwable.toErrorResult(mapper: ErrorResultMapper): ErrorResult = mapper.map(this)

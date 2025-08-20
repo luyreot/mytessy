@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teoryul.mytesy.ui.common.RunOnce
 import com.teoryul.mytesy.ui.common.SafeImage
-import com.teoryul.mytesy.util.AppImage
-import com.teoryul.mytesy.util.LoadImageBitmap
+import com.teoryul.mytesy.ui.common.AppImage
+import com.teoryul.mytesy.ui.common.LoadImageBitmap
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

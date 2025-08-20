@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.ui.common
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable

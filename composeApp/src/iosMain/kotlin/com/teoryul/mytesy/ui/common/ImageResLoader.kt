@@ -1,10 +1,10 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
-import com.teoryul.mytesy.util.AppLogger.d
-import com.teoryul.mytesy.util.AppLogger.e
+import com.teoryul.mytesy.infra.AppLogger.d
+import com.teoryul.mytesy.infra.AppLogger.e
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
@@ -12,6 +12,7 @@ import org.jetbrains.skia.Image
 import platform.Foundation.NSData
 import platform.UIKit.UIImage
 import platform.UIKit.UIImagePNGRepresentation
+import platform.posix.memcpy
 
 @Composable
 actual fun LoadImageBitmap(image: AppImage): ImageBitmap? {
@@ -35,7 +36,7 @@ private fun getImageBitmap(name: String): ImageBitmap? {
 
         val byteArray: ByteArray = ByteArray(nsData.length.toInt()).apply {
             usePinned { pinned ->
-                platform.posix.memcpy(
+                memcpy(
                     pinned.addressOf(0),
                     nsData.bytes,
                     nsData.length

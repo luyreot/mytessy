@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,6 +26,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import com.teoryul.mytesy.ui.addappliance.AddApplianceScreen
 import com.teoryul.mytesy.ui.comingsoon.ComingSoonScreen
+import com.teoryul.mytesy.ui.common.AlertDialog
 import com.teoryul.mytesy.ui.home.HomeScreen
 import com.teoryul.mytesy.ui.lifecycle.WithRetainedTabViewModelStore
 import com.teoryul.mytesy.ui.lifecycle.WithScreenViewModelStore
@@ -82,6 +84,30 @@ fun AppNavigation(
 
         isNavigatingBack = false
     }
+
+    var showSessionExpiredDialog by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEffect.collect { effect ->
+            when (effect) {
+                is AppViewEffect.SessionLost -> {
+                    showSessionExpiredDialog = true
+                    navigateToRoot(Screen.Welcome)
+                }
+            }
+        }
+    }
+
+    AlertDialog(
+        show = showSessionExpiredDialog,
+        title = "Your session expired",
+        message = "Please sign in to continue.",
+        buttonText = "Sign in",
+        onDismiss = {
+            showSessionExpiredDialog = false
+            navigateTo(Screen.Login)
+        }
+    )
 
     BackHandlerPlatform(
         enabled = screenBackStack.size > 1,

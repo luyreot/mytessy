@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.infra
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +9,7 @@ import platform.UIKit.UIApplicationDidEnterBackgroundNotification
 
 actual class AppVisibilityProvider {
 
-    private val _visibility = MutableStateFlow(AppVisibility.Background)
+    private val _visibility = MutableStateFlow(AppVisibility.BACKGROUND)
 
     actual val visibility: StateFlow<AppVisibility> = _visibility
 
@@ -20,12 +20,12 @@ actual class AppVisibilityProvider {
             name = UIApplicationDidBecomeActiveNotification,
             `object` = null,
             queue = NSOperationQueue.Companion.mainQueue
-        ) { _visibility.value = AppVisibility.Foreground }
+        ) { _visibility.value = AppVisibility.FOREGROUND }
 
         center.addObserverForName(
             name = UIApplicationDidEnterBackgroundNotification,
             `object` = null,
             queue = NSOperationQueue.Companion.mainQueue
-        ) { _visibility.value = AppVisibility.Background }
+        ) { _visibility.value = AppVisibility.BACKGROUND }
     }
 }

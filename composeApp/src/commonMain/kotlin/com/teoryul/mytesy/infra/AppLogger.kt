@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.infra
 
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

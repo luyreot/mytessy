@@ -2,19 +2,21 @@ package com.teoryul.mytesy.domain.usecase
 
 import com.teoryul.mytesy.data.api.ApiService
 import com.teoryul.mytesy.domain.model.ErrorResult
+import com.teoryul.mytesy.domain.model.ErrorResultMapper
 import com.teoryul.mytesy.domain.model.toErrorResult
 import com.teoryul.mytesy.domain.session.SessionData
 import com.teoryul.mytesy.domain.session.SessionManager
-import com.teoryul.mytesy.util.AppLogger.e
+import com.teoryul.mytesy.infra.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class LoginUseCase(
     private val api: ApiService,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val errorMapper: ErrorResultMapper
 ) {
 
-    suspend operator fun invoke(email: String, password: String): LoginResult {
+    suspend operator fun invoke(email: String, password: String): Result {
         return withContext(Dispatchers.Default) {
             try {
                 // Account registered check + Old login
@@ -24,7 +26,7 @@ class LoginUseCase(
                         .firstOrNull { it.isNotEmpty() }
                         ?.firstOrNull()
                         .orEmpty()
-                    return@withContext LoginResult.Fail(
+                    return@withContext Result.Fail(
                         ErrorResult.ResponseError(firstNonNullErrorMessage)
                     )
                 }
@@ -38,16 +40,16 @@ class LoginUseCase(
                     )
                     if (oldLoginResponse.error != null) {
                         return@withContext when (oldLoginResponse.error) {
-                            "1" -> LoginResult.Fail(ErrorResult.ResponseError("Wrong E-mail or Password"))
-                            else -> LoginResult.Fail(ErrorResult.ResponseError(oldLoginResponse.error))
+                            "1" -> Result.Fail(ErrorResult.ResponseError("Wrong E-mail or Password"))
+                            else -> Result.Fail(ErrorResult.ResponseError(oldLoginResponse.error))
                         }
                     }
-                    if (oldLoginResponse.acc_alt.isNullOrEmpty() ||
-                        oldLoginResponse.acc_session.isNullOrEmpty()
+                    if (oldLoginResponse.accAlt.isNullOrEmpty() ||
+                        oldLoginResponse.accSession.isNullOrEmpty()
                     ) {
-                        return@withContext LoginResult.Fail(ErrorResult.ResponseError("Missing parameters"))
+                        return@withContext Result.Fail(ErrorResult.ResponseError("Missing parameters"))
                     }
-                    return@withContext LoginResult.AccountNotFound("Account not found")
+                    return@withContext Result.AccountNotFound("Account not found")
                 }
 
                 // New login
@@ -56,14 +58,14 @@ class LoginUseCase(
                     val firstNonNullErrorMessage: String = loginResponse.errors.values
                         .firstOrNull { it.isNotEmpty() }
                         .orEmpty()
-                    return@withContext LoginResult.Fail(
+                    return@withContext Result.Fail(
                         ErrorResult.ResponseError(firstNonNullErrorMessage)
                     )
                 }
                 if (loginResponse.token.isNullOrEmpty() ||
                     loginResponse.userID == null
                 ) {
-                    return@withContext LoginResult.Fail(ErrorResult.ResponseError("Missing parameters"))
+                    return@withContext Result.Fail(ErrorResult.ResponseError("Missing parameters"))
                 }
 
                 // Old login
@@ -76,22 +78,22 @@ class LoginUseCase(
                 )
                 if (oldLoginResponse.error != null) {
                     return@withContext when (oldLoginResponse.error) {
-                        "1" -> LoginResult.Fail(ErrorResult.ResponseError("Wrong E-mail or Password"))
-                        else -> LoginResult.Fail(ErrorResult.ResponseError(oldLoginResponse.error))
+                        "1" -> Result.Fail(ErrorResult.ResponseError("Wrong E-mail or Password"))
+                        else -> Result.Fail(ErrorResult.ResponseError(oldLoginResponse.error))
                     }
                 }
-                if (oldLoginResponse.acc_session.isNullOrEmpty() ||
-                    oldLoginResponse.acc_alt.isNullOrEmpty()
+                if (oldLoginResponse.accSession.isNullOrEmpty() ||
+                    oldLoginResponse.accAlt.isNullOrEmpty()
                 ) {
-                    return@withContext LoginResult.Fail(ErrorResult.ResponseError("Missing parameters"))
+                    return@withContext Result.Fail(ErrorResult.ResponseError("Missing session parameters"))
                 }
 
                 sessionManager.set(
                     SessionData(
                         token = loginResponse.token,
-                        accSession = oldLoginResponse.acc_session,
-                        accAlt = oldLoginResponse.acc_alt,
-                        userId = loginResponse.userID.toLong(),
+                        accSession = oldLoginResponse.accSession,
+                        accAlt = oldLoginResponse.accAlt,
+                        userId = loginResponse.userID,
                         email = loginResponse.email.orEmpty(),
                         password = loginResponse.password.orEmpty(),
                         firstName = loginResponse.firstName.orEmpty(),
@@ -100,21 +102,21 @@ class LoginUseCase(
                     )
                 )
 
-                return@withContext LoginResult.Success
+                return@withContext Result.Success
             } catch (t: Throwable) {
-                val error = t.toErrorResult()
-                e(error.message)
-                return@withContext LoginResult.Fail(error)
+                val error = t.toErrorResult(errorMapper)
+                AppLogger.e(error.message)
+                return@withContext Result.Fail(error)
             }
         }
     }
 
-    sealed class LoginResult() {
+    sealed class Result {
 
-        data object Success : LoginResult()
+        data object Success : Result()
 
-        data class AccountNotFound(val message: String) : LoginResult()
+        data class AccountNotFound(val message: String) : Result()
 
-        data class Fail(val error: ErrorResult) : LoginResult()
+        data class Fail(val error: ErrorResult) : Result()
     }
 }

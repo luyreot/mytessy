@@ -8,6 +8,7 @@ import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginRequest
 import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginResponse
 import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationRequest
 import com.teoryul.mytesy.data.api.model.registrationcheck.CheckRegistrationResponse
+import com.teoryul.mytesy.data.common.UnauthenticatedException
 import com.teoryul.mytesy.domain.session.SessionProvider
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -49,7 +50,7 @@ class ApiService(
     suspend fun loginOldApp(
         email: String,
         password: String,
-        userID: Int?,
+        userID: Long?,
         userEmail: String? = email,
         userPass: String? = password
     ): OldAppLoginResponse = withContext(Dispatchers.IO) {
@@ -69,14 +70,14 @@ class ApiService(
 
     suspend fun getOldAppDevices(
     ): OldAppDevicesResponse = withContext(Dispatchers.IO) {
-        val session = sessionProvider.require()
+        val session = sessionProvider.require() ?: throw UnauthenticatedException()
 
         val request = OldAppDevicesRequest(
-            ALT = session.accAlt,
-            CURRENT_SESSION = null,
-            PHPSESSID = session.accSession,
+            alt = session.accAlt,
+            currentSession = null,
+            phpSessId = session.accSession,
             lang = session.lang,
-            last_login_username = session.email,
+            lastLoginUsername = session.email,
             userEmail = session.email,
             userID = session.userId,
             userPass = session.password

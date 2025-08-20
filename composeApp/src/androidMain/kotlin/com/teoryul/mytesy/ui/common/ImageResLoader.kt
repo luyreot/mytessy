@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.ui.common
 
 import android.content.res.Resources
 import android.graphics.BitmapFactory
@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import com.teoryul.mytesy.R
-import com.teoryul.mytesy.util.AppLogger.e
+import com.teoryul.mytesy.infra.AppLogger.e
 
 @Composable
 actual fun LoadImageBitmap(image: AppImage): ImageBitmap? {

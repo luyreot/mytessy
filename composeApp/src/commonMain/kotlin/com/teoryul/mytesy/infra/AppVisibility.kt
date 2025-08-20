@@ -1,10 +1,10 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.infra
 
 import kotlinx.coroutines.flow.StateFlow
 
 enum class AppVisibility {
-    Foreground,
-    Background
+    FOREGROUND,
+    BACKGROUND
 }
 
 expect class AppVisibilityProvider {

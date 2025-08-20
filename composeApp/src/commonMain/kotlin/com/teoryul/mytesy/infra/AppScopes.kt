@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.infra
 
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineName

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class OldAppLoginRequest(
     val email: String,
     val password: String,
-    val userID: Int?,
+    val userID: Long?,
     val userEmail: String?,
     val userPass: String?,
     val lang: String = "en"

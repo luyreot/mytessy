@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.util
+package com.teoryul.mytesy.infra
 
 import platform.Foundation.NSLog
 

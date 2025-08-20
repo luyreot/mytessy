@@ -2,51 +2,64 @@ package com.teoryul.mytesy.domain.usecase
 
 import com.teoryul.mytesy.domain.appliance.ApplianceEntity
 import com.teoryul.mytesy.domain.model.ErrorResult
+import com.teoryul.mytesy.domain.model.ErrorResultMapper
 import com.teoryul.mytesy.domain.model.toErrorResult
 import com.teoryul.mytesy.domain.repo.ApplianceRepository
-import com.teoryul.mytesy.util.AppLogger
+import com.teoryul.mytesy.infra.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class ApplianceUseCase(
-    private val applianceRepository: ApplianceRepository
+    private val applianceRepository: ApplianceRepository,
+    private val errorMapper: ErrorResultMapper
 ) {
 
     fun observeAppliances(): Flow<List<ApplianceEntity>> {
         return applianceRepository.observeAppliances()
     }
 
-    suspend fun syncAppliances(): ApplianceResult {
+    suspend fun syncAppliances(): Result {
         return withContext(Dispatchers.Default) {
-            return@withContext try {
+            try {
                 applianceRepository.refreshAppliances()
-                ApplianceResult.Success
+                return@withContext Result.Success
             } catch (t: Throwable) {
-                val error = t.toErrorResult()
+                val error = t.toErrorResult(errorMapper)
                 AppLogger.e(error.message)
-                ApplianceResult.Fail(error)
+                return@withContext Result.Fail(error)
             }
         }
     }
 
-    suspend fun deleteAppliance(deviceSerial: String) {
-        withContext(Dispatchers.Default) {
-            applianceRepository.deleteAppliance(deviceSerial)
+    suspend fun deleteAppliance(deviceSerial: String): Result {
+        return withContext(Dispatchers.Default) {
+            try {
+                applianceRepository.deleteAppliance(deviceSerial)
+                return@withContext Result.Success
+            } catch (t: Throwable) {
+                val error = t.toErrorResult(errorMapper)
+                AppLogger.e(error.message)
+                return@withContext Result.Fail(error)
+            }
         }
     }
 
-    suspend fun deleteAllAppliances() {
-        withContext(Dispatchers.Default) {
-            applianceRepository.deleteAllAppliances()
+    suspend fun deleteAllAppliances(): Result {
+        return withContext(Dispatchers.Default) {
+            try {
+                applianceRepository.deleteAllAppliances()
+                return@withContext Result.Success
+            } catch (t: Throwable) {
+                val error = t.toErrorResult(errorMapper)
+                AppLogger.e(error.message)
+                return@withContext Result.Fail(error)
+            }
         }
     }
 
-
-    sealed class ApplianceResult {
-
-        data object Success : ApplianceResult()
-
-        data class Fail(val error: ErrorResult) : ApplianceResult()
+    sealed class Result {
+        data object Success : Result()
+        data class Fail(val error: ErrorResult) : Result()
     }
 }

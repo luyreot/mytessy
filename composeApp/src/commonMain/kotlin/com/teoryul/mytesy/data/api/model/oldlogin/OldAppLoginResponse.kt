@@ -1,10 +1,13 @@
 package com.teoryul.mytesy.data.api.model.oldlogin
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class OldAppLoginResponse(
-    val acc_alt: String? = null,
-    val acc_session: String? = null,
+    @SerialName("acc_alt")
+    val accAlt: String? = null,
+    @SerialName("acc_session")
+    val accSession: String? = null,
     val error: String? = null
 )

@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,12 +31,18 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     onAddApplianceClick: () -> Unit
 ) {
+    val appliances = viewModel.appliances.collectAsState()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        EmptyAppliancePlaceholder(
-            onAddApplianceClick = onAddApplianceClick
-        )
+        if (appliances.value.isEmpty()) {
+            EmptyAppliancePlaceholder(
+                onAddApplianceClick = onAddApplianceClick
+            )
+        } else {
+            // todo add list of devices
+        }
     }
 }
 

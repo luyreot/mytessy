@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -20,23 +19,21 @@ class SessionManager(
 
     private val _session = MutableStateFlow<SessionData?>(null)
 
-    /** Hot, in-memory session for the whole app runtime. */
+    /**
+     * Hot, in-memory session for the whole app runtime.
+     */
     val session: StateFlow<SessionData?> = _session
 
     override val current: SessionData? get() = session.value
 
-    /** Two-state view for coordinators/pollers/UI routing. */
+    /**
+     * Two-state view for coordinators/pollers/UI routing.
+     */
     val status: StateFlow<SessionStatus> =
         session
             .map { if (it == null) SessionStatus.LOGGED_OUT else SessionStatus.LOGGED_IN }
             .distinctUntilChanged()
             .stateIn(appScope, SharingStarted.Eagerly, SessionStatus.LOGGED_OUT)
-
-    init {
-        appScope.launch {
-            _session.value = sessionTable.loadSession()
-        }
-    }
 
     suspend fun set(data: SessionData) {
         writeMutex.withLock {

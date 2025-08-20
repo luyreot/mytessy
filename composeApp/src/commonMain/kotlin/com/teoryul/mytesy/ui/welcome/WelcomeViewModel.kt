@@ -24,11 +24,11 @@ class WelcomeViewModel(
     fun restoreSession() {
         viewModelScope.launch {
             when (restoreSessionUseCase()) {
-                RestoreSessionUseCase.SessionResult.SessionNotFound -> _viewState.update {
+                RestoreSessionUseCase.Result.SessionNotFound -> _viewState.update {
                     it.copy(isLoading = false)
                 }
 
-                RestoreSessionUseCase.SessionResult.SessionRestored -> _viewEffect.emit(
+                RestoreSessionUseCase.Result.SessionRestored -> _viewEffect.emit(
                     WelcomeViewEffect.NavigateToHome
                 )
             }

@@ -83,17 +83,17 @@ class LoginViewModel(
             }
 
             when (val result = loginUseCase(email = state.email, password = state.password)) {
-                is LoginUseCase.LoginResult.Fail -> {
+                is LoginUseCase.Result.Fail -> {
                     delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = result.error.message) }
                 }
 
-                is LoginUseCase.LoginResult.AccountNotFound -> {
+                is LoginUseCase.Result.AccountNotFound -> {
                     delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = result.message) }
                 }
 
-                is LoginUseCase.LoginResult.Success -> {
+                is LoginUseCase.Result.Success -> {
                     delayJob.cancel()
                     _viewState.update { it.copy(errorMessage = null) }
                     _viewEffect.emit(LoginViewEffect.NavigateToHome)
