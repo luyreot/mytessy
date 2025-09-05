@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.ui.navigation
+package com.teoryul.mytesy.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-class AppViewModel(
+class AppMainViewModel(
     private val visibilityProvider: AppVisibilityProvider,
     private val sessionManager: SessionManager,
     private val restoreSessionUseCase: RestoreSessionUseCase,
@@ -27,8 +27,8 @@ class AppViewModel(
     private val polling: PollingManager
 ) : ViewModel() {
 
-    private val _viewEffect = MutableSharedFlow<AppViewEffect>()
-    val viewEffect: SharedFlow<AppViewEffect> = _viewEffect
+    private val _viewEffect = MutableSharedFlow<AppMainViewEffect>()
+    val viewEffect: SharedFlow<AppMainViewEffect> = _viewEffect
 
     init {
         // Gate all polling by session + foreground
@@ -61,7 +61,7 @@ class AppViewModel(
                         RestoreSessionUseCase.Result.SessionRestored -> PollDecision.IMMEDIATE
                         RestoreSessionUseCase.Result.SessionNotFound -> {
                             sessionManager.clear()
-                            _viewEffect.emit(AppViewEffect.SessionLost)
+                            _viewEffect.emit(AppMainViewEffect.SessionLost)
                             PollDecision.BACKOFF
                         }
                     }

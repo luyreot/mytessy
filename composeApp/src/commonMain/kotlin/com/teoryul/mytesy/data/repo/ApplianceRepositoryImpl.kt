@@ -1,11 +1,13 @@
 package com.teoryul.mytesy.data.repo
 
 import com.teoryul.mytesy.data.api.ApiService
+import com.teoryul.mytesy.data.api.model.appliance.ApplianceCommand
+import com.teoryul.mytesy.data.api.model.appliance.CommandPowerValues
+import com.teoryul.mytesy.data.common.UnauthenticatedException
 import com.teoryul.mytesy.data.db.ApplianceTable
 import com.teoryul.mytesy.data.db.toEntity
 import com.teoryul.mytesy.domain.appliance.ApplianceEntity
 import com.teoryul.mytesy.domain.repo.ApplianceRepository
-import com.teoryul.mytesy.data.common.UnauthenticatedException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -37,6 +39,14 @@ class ApplianceRepositoryImpl(
         }
 
         applianceTable.insertAppliances(response)
+    }
+
+    override suspend fun toggleAppliancePower(applianceId: String, enabled: Boolean) {
+        api.sendApplianceCommand(
+            applianceId = applianceId,
+            command = ApplianceCommand.POWER.commandName,
+            commandValue = (if (enabled) CommandPowerValues.TURN_OFF else CommandPowerValues.TURN_ON).commandValue
+        )
     }
 
     override suspend fun deleteAppliance(serial: String) {

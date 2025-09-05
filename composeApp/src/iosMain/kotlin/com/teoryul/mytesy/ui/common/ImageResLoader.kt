@@ -54,4 +54,5 @@ private fun getImageBitmap(name: String): ImageBitmap? {
 private fun getImageName(image: AppImage): String = when (image) {
     AppImage.WelcomeLogo -> "WelcomeLogo"
     AppImage.WelcomeImage -> "WelcomeImage"
+    AppImage.ModecoIcon -> "Modeco"
 }

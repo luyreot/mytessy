@@ -1,6 +1,6 @@
 package com.teoryul.mytesy.di
 
-import com.teoryul.mytesy.ui.navigation.AppViewModel
+import com.teoryul.mytesy.ui.main.AppMainViewModel
 import com.teoryul.mytesy.ui.addappliance.AddApplianceViewModel
 import com.teoryul.mytesy.ui.home.HomeViewModel
 import com.teoryul.mytesy.ui.login.LoginViewModel
@@ -11,7 +11,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModelOf(::AppViewModel)
+    viewModelOf(::AppMainViewModel)
     viewModelOf(::LoginViewModel)
     viewModelOf(::WelcomeViewModel)
     viewModelOf(::HomeViewModel)

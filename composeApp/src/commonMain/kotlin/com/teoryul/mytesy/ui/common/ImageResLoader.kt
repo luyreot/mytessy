@@ -8,5 +8,6 @@ expect fun LoadImageBitmap(image: AppImage): ImageBitmap?
 
 enum class AppImage(val contentDescription: String) {
     WelcomeLogo("Logo Text"),
-    WelcomeImage("Logo")
+    WelcomeImage("Logo"),
+    ModecoIcon("Modeco")
 }

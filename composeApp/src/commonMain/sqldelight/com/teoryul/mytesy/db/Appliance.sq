@@ -15,6 +15,7 @@ CREATE TABLE appliance (
     status_text TEXT,
     status_tmpC TEXT,
     status_tmpT TEXT,
+    status_tmpR TEXT,
     status_pwr TEXT,
     status_mode TEXT,
     status_err TEXT,
@@ -70,7 +71,7 @@ SELECT * FROM appliance;
 insertOrReplaceAppliance:
 INSERT OR REPLACE INTO appliance (
     device_serial, url, id, group_name, short_name, description, erp, activity, online, set_mc,
-    status_id, status_text, status_tmpC, status_tmpT, status_pwr, status_mode, status_err, status_wsw,
+    status_id, status_text, status_tmpC, status_tmpT, status_tmpR, status_pwr, status_mode, status_err, status_wsw,
     status_ht, status_tz, status_wSSID, status_wIP, status_date, status_prfl, status_extr,
     status_hsw, status_reset, status_wi, status_wcntr, status_bst, status_vac, status_prgVac,
     status_prgP1MO, status_prgP1TU, status_prgP1WE, status_prgP1TH, status_prgP1FR, status_prgP1SA,
@@ -79,7 +80,7 @@ INSERT OR REPLACE INTO appliance (
     status_prgP3FR, status_prgP3SA, status_prgP3SU, status_pwcalc, status_pwc_t, status_pwc_u_date,
     status_pwc_u_timestamp, status_pwc_u_utc, status_wtstp, status_wup, status_wdBm
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteAllAppliances:
 DELETE FROM appliance;

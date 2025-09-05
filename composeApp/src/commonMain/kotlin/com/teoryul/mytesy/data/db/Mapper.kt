@@ -19,6 +19,7 @@ fun Appliance.toEntity(): ApplianceEntity {
         statusText = status_text,
         statusTmpC = status_tmpC,
         statusTmpT = status_tmpT,
+        statusTmpR = status_tmpR,
         statusPwr = status_pwr,
         statusMode = status_mode,
         statusErr = status_err,

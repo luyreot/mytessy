@@ -17,6 +17,11 @@ interface ApplianceRepository {
     suspend fun refreshAppliances()
 
     /**
+     * Turn the appliance on and off.
+     */
+    suspend fun toggleAppliancePower(applianceId: String, enabled: Boolean)
+
+    /**
      * Deletes a single appliance from the local database using its serial.
      */
     suspend fun deleteAppliance(serial: String)

@@ -51,7 +51,7 @@ class PollingManager(
     /**
      * Pull-to-refresh for a single job: pause → one run (swallow errors, backoff handled on next loop) → resume at base interval (no extra immediate).
      */
-    fun refreshNow(key: PollKey) {
+    fun refreshNow(key: PollKey, onRefreshFinished: () -> Unit) {
         val entry = entries[key] ?: return
         entry.job?.cancel()
         entry.job = null
@@ -59,6 +59,7 @@ class PollingManager(
         scope.launch {
             entry.mutex.withLock {
                 runCatching { entry.runner() }.onFailure { AppLogger.e(it) }
+                onRefreshFinished()
             }
             if (active) start(key, immediate = false)
         }

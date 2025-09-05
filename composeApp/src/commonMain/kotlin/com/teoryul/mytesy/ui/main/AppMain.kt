@@ -1,4 +1,4 @@
-package com.teoryul.mytesy.ui.navigation
+package com.teoryul.mytesy.ui.main
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -31,6 +31,11 @@ import com.teoryul.mytesy.ui.home.HomeScreen
 import com.teoryul.mytesy.ui.lifecycle.WithRetainedTabViewModelStore
 import com.teoryul.mytesy.ui.lifecycle.WithScreenViewModelStore
 import com.teoryul.mytesy.ui.login.LoginScreen
+import com.teoryul.mytesy.ui.navigation.BackHandlerPlatform
+import com.teoryul.mytesy.ui.navigation.BottomNavItem
+import com.teoryul.mytesy.ui.navigation.BottomNavigationBar
+import com.teoryul.mytesy.ui.navigation.Screen
+import com.teoryul.mytesy.ui.navigation.ScreenBackStackSaver
 import com.teoryul.mytesy.ui.notifications.NotificationsScreen
 import com.teoryul.mytesy.ui.settings.SettingsScreen
 import com.teoryul.mytesy.ui.welcome.WelcomeScreen
@@ -42,8 +47,8 @@ import org.koin.compose.viewmodel.koinViewModel
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun AppNavigation(
-    viewModel: AppViewModel = koinViewModel()
+fun AppMain(
+    viewModel: AppMainViewModel = koinViewModel()
 ) {
     val stateHolder = rememberSaveableStateHolder()
 
@@ -90,7 +95,7 @@ fun AppNavigation(
     LaunchedEffect(Unit) {
         viewModel.viewEffect.collect { effect ->
             when (effect) {
-                is AppViewEffect.SessionLost -> {
+                is AppMainViewEffect.SessionLost -> {
                     showSessionExpiredDialog = true
                     navigateToRoot(Screen.Welcome)
                 }
@@ -137,7 +142,7 @@ fun AppNavigation(
             }
         },
         bottomBar = {
-            if (currentScreen in BottomNavItem.items.map { it.screen }) {
+            if (currentScreen in BottomNavItem.Companion.items.map { it.screen }) {
                 BottomNavigationBar(
                     currentScreen = currentScreen,
                     onTabSelected = { tab ->
@@ -194,7 +199,10 @@ fun AppNavigation(
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 HomeScreen(
                                     stateHolderKey = stateHolderKey,
-                                    onAddApplianceClick = { navigateTo(Screen.AddAppliance) }
+                                    onAddApplianceClick = { navigateTo(Screen.AddAppliance) },
+                                    onApplianceClick = { applianceEntity ->
+                                        // TODO: Implement appliance detail screen
+                                    }
                                 )
                             }
                         }

@@ -40,6 +40,7 @@ class ApplianceTable(databaseDriverFactory: DatabaseDriverFactory) {
                     status_text = appliance.deviceStatus.text,
                     status_tmpC = appliance.deviceStatus.tmpC,
                     status_tmpT = appliance.deviceStatus.tmpT,
+                    status_tmpR = appliance.deviceStatus.tmpR,
                     status_pwr = appliance.deviceStatus.pwr,
                     status_mode = appliance.deviceStatus.mode,
                     status_err = appliance.deviceStatus.err,

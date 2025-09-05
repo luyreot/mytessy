@@ -32,6 +32,22 @@ class ApplianceUseCase(
         }
     }
 
+    suspend fun toggleAppliancePower(appliance: ApplianceEntity, enabled: Boolean): Result {
+        return withContext(Dispatchers.Default) {
+            try {
+                applianceRepository.toggleAppliancePower(
+                    applianceId = appliance.id.orEmpty(),
+                    enabled = enabled
+                )
+                return@withContext Result.Success
+            } catch (t: Throwable) {
+                val error = t.toErrorResult(errorMapper)
+                AppLogger.e(error.message)
+                return@withContext Result.Fail(error)
+            }
+        }
+    }
+
     suspend fun deleteAppliance(deviceSerial: String): Result {
         return withContext(Dispatchers.Default) {
             try {

@@ -15,6 +15,7 @@ data class ApplianceEntity(
     val statusText: String?,
     val statusTmpC: String?,
     val statusTmpT: String?,
+    val statusTmpR: String?,
     val statusPwr: String?,
     val statusMode: String?,
     val statusErr: String?,

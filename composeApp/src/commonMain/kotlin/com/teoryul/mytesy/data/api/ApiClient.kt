@@ -18,6 +18,7 @@ class ApiClient(
 
     val httpClient: HttpClient by lazy {
         HttpClient(getHttpClientEngine()) {
+            expectSuccess = true
             install(ContentNegotiation) {
                 json(json)
                 register(ContentType.Text.Html, KotlinxSerializationConverter(json))

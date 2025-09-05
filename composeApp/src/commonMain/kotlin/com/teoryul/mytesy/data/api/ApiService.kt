@@ -2,6 +2,7 @@ package com.teoryul.mytesy.data.api
 
 import com.teoryul.mytesy.data.api.model.appliance.OldAppDevicesRequest
 import com.teoryul.mytesy.data.api.model.appliance.OldAppDevicesResponse
+import com.teoryul.mytesy.data.api.model.appliance.SendApplianceCommandRequest
 import com.teoryul.mytesy.data.api.model.login.LoginRequest
 import com.teoryul.mytesy.data.api.model.login.LoginResponse
 import com.teoryul.mytesy.data.api.model.oldlogin.OldAppLoginRequest
@@ -84,6 +85,33 @@ class ApiService(
         )
 
         client.httpClient.post("https://ad.mytesy.com/rest/old-app-devices") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
+
+    suspend fun sendApplianceCommand(
+        applianceId: String,
+        command: String,
+        commandValue: String
+    ): Unit = withContext(Dispatchers.IO) {
+        val session = sessionProvider.require() ?: throw UnauthenticatedException()
+
+        val request = SendApplianceCommandRequest(
+            alt = session.accAlt,
+            currentSession = null,
+            phpSessId = session.accSession,
+            lang = session.lang,
+            lastLoginUsername = session.email,
+            userEmail = session.email,
+            userID = session.userId,
+            userPass = session.password,
+            applianceId = applianceId,
+            command = command,
+            commandValue = commandValue
+        )
+
+        client.httpClient.post("https://ad.mytesy.com/rest/old-app-set-device-status") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()

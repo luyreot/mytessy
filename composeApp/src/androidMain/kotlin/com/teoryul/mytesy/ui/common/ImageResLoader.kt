@@ -26,6 +26,7 @@ private fun getImageBitmap(resources: Resources, resId: Int): ImageBitmap? {
 }
 
 private fun getImageResId(image: AppImage): Int = when (image) {
-    AppImage.WelcomeLogo -> R.drawable.welcome_logo
-    AppImage.WelcomeImage -> R.drawable.welcome_image
+    AppImage.WelcomeLogo -> R.drawable.logo_tesy_welcome
+    AppImage.WelcomeImage -> R.drawable.img_welcome
+    AppImage.ModecoIcon -> R.drawable.ic_modeco
 }
