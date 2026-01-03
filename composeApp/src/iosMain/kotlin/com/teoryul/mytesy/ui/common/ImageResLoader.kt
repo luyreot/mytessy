@@ -1,6 +1,7 @@
 package com.teoryul.mytesy.ui.common
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.teoryul.mytesy.infra.AppLogger.d
@@ -16,7 +17,8 @@ import platform.posix.memcpy
 
 @Composable
 actual fun LoadImageBitmap(image: AppImage): ImageBitmap? {
-    return getImageBitmap(getImageName(image))
+    val name = getImageName(image)
+    return remember(name) { getImageBitmap(name) }
 }
 
 @OptIn(ExperimentalForeignApi::class)
@@ -55,4 +57,18 @@ private fun getImageName(image: AppImage): String = when (image) {
     AppImage.WelcomeLogo -> "WelcomeLogo"
     AppImage.WelcomeImage -> "WelcomeImage"
     AppImage.ModecoIcon -> "Modeco"
+    AppImage.AddApplianceImage -> "AddAppliance"
+    AppImage.ConvectorsIcon -> "Convectors"
+    AppImage.ConvertorConvEcoCN04Icon -> "ConvertorConvEcoCN04"
+    AppImage.ConvertorFinEcoCN06Icon -> "ConvertorFinEcoCN06"
+    AppImage.ConvertorFloorEcoCN052Icon -> "ConvertorFloorEcoCN052"
+    AppImage.ConvertorHeatEcoCN03Icon -> "ConvertorHeatEcoCN03"
+    AppImage.ConvertorHeatEcoCN031Icon -> "ConvertorHeatEcoCN031"
+    AppImage.ConvertorLivEcoCN051Icon -> "ConvertorLivEcoCN051"
+    AppImage.WaterHeatersIcon -> "WaterHeaters"
+    AppImage.WaterHeaterBelliSlimoE31Icon -> "WaterHeaterBelliSlimoE31"
+    AppImage.WaterHeaterBelliSlimoLiteCloudE32Icon -> "WaterHeaterBelliSlimoLiteCloudE32"
+    AppImage.WaterHeaterBiLightCloudB15Icon -> "WaterHeaterBiLightCloudB15"
+    AppImage.WaterHeaterModEcoC21Icon -> "WaterHeaterModEcoC21"
+    AppImage.WaterHeaterModEcoC22Icon -> "WaterHeaterModEcoC22"
 }

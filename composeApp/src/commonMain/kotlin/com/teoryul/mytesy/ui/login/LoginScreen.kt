@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -97,7 +97,7 @@ fun LoginScreen(
                     enabled = !viewState.isLoading
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
                         contentDescription = "Back"
                     )
                 }
@@ -198,14 +198,14 @@ fun LoginScreen(
                 }
 
                 Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
                     onClick = {
                         if (viewState.isFormValid && !viewState.isLoading) {
                             viewModel.onLoginClicked()
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
                     shape = RoundedCornerShape(50),
                     enabled = viewState.isFormValid,
                     colors = ButtonDefaults.buttonColors(

@@ -5,13 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.teoryul.mytesy.domain.model.ErrorResult
 import com.teoryul.mytesy.domain.session.SessionManager
 import com.teoryul.mytesy.domain.session.SessionStatus
+import com.teoryul.mytesy.domain.usecase.ApplianceGroupsUseCase
 import com.teoryul.mytesy.domain.usecase.ApplianceUseCase
 import com.teoryul.mytesy.domain.usecase.RestoreSessionUseCase
 import com.teoryul.mytesy.infra.AppVisibility
 import com.teoryul.mytesy.infra.AppVisibilityProvider
 import com.teoryul.mytesy.infra.polling.PollConfig
-import com.teoryul.mytesy.infra.polling.PollKey
 import com.teoryul.mytesy.infra.polling.PollDecision
+import com.teoryul.mytesy.infra.polling.PollKey
 import com.teoryul.mytesy.infra.polling.PollingManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class AppMainViewModel(
+    val applianceGroups: ApplianceGroupsUseCase,
     private val visibilityProvider: AppVisibilityProvider,
     private val sessionManager: SessionManager,
     private val restoreSessionUseCase: RestoreSessionUseCase,

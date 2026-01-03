@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -59,10 +60,9 @@ fun ApplianceList(
     onPowerToggle: (ApplianceEntity, enabled: Boolean) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
     ) {
         items(
             items = items,
@@ -213,10 +213,10 @@ private fun ApplianceOnlineContent(
 
                 // Overlapping circular power button
                 FloatingActionButton(
-                    onClick = { onPowerToggle(powerOn) },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .size(44.dp),
+                    onClick = { onPowerToggle(powerOn) },
                     shape = CircleShape,
                     containerColor = Color.White
                 ) {

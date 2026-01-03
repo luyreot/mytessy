@@ -8,11 +8,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +28,10 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.teoryul.mytesy.domain.usecase.ApplianceGroupItem
 import com.teoryul.mytesy.ui.addappliance.AddApplianceScreen
+import com.teoryul.mytesy.ui.appliancegroup.ApplianceGroupScreen
 import com.teoryul.mytesy.ui.comingsoon.ComingSoonScreen
 import com.teoryul.mytesy.ui.common.AlertDialog
 import com.teoryul.mytesy.ui.home.HomeScreen
@@ -130,6 +137,29 @@ fun AppMain(
                     title = { Text("First steps") }
                 )
 
+                is Screen.AddApplianceChooseGroup,
+                is Screen.AddApplianceGroupConvectors,
+                is Screen.AddApplianceGroupWaterHeaters -> {
+                    val title = when (currentScreen) {
+                        is Screen.AddApplianceChooseGroup -> "Choose group"
+                        is Screen.AddApplianceGroupConvectors -> "Choose convector"
+                        is Screen.AddApplianceGroupWaterHeaters -> "Choose electric water heater"
+                        else -> "Choose"
+                    }
+                    CenterAlignedTopAppBar(
+                        title = { Text(title) },
+                        navigationIcon = {
+                            Icon(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .clickable(onClick = { navigateBack() }),
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                                contentDescription = "Back"
+                            )
+                        }
+                    )
+                }
+
                 is Screen.Notifications -> CenterAlignedTopAppBar(
                     title = { Text("Notifications") }
                 )
@@ -190,9 +220,7 @@ fun AppMain(
                         }
 
                         is Screen.ComingSoon -> WithScreenViewModelStore(key = viewModelStoreKey) {
-                            ComingSoonScreen(
-                                onBackClick = { navigateBack() }
-                            )
+                            ComingSoonScreen(onBackClick = { navigateBack() })
                         }
 
                         is Screen.Home -> stateHolder.SaveableStateProvider(stateHolderKey) {
@@ -210,26 +238,84 @@ fun AppMain(
                         is Screen.AddAppliance -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 AddApplianceScreen(
-                                    stateHolderKey = stateHolderKey
+                                    stateHolderKey = stateHolderKey,
+                                    onNextClick = { navigateTo(Screen.AddApplianceChooseGroup) }
                                 )
                             }
                         }
 
                         is Screen.Notifications -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
-                                NotificationsScreen(
-                                    stateHolderKey = stateHolderKey
-                                )
+                                NotificationsScreen(stateHolderKey = stateHolderKey)
                             }
                         }
 
                         is Screen.Settings -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
-                                SettingsScreen(
-                                    stateHolderKey = stateHolderKey
+                                SettingsScreen(stateHolderKey = stateHolderKey)
+                            }
+                        }
+
+                        Screen.AddApplianceChooseGroup -> stateHolder.SaveableStateProvider(
+                            stateHolderKey
+                        ) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                ApplianceGroupScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    items = viewModel.applianceGroups.commonGroupScreen,
+                                    onItemClick = { item ->
+                                        if (item == ApplianceGroupItem.Convectors) {
+                                            navigateTo(Screen.AddApplianceGroupConvectors)
+                                            return@ApplianceGroupScreen
+                                        }
+                                        if (item == ApplianceGroupItem.WaterHeaters) {
+                                            navigateTo(Screen.AddApplianceGroupWaterHeaters)
+                                            return@ApplianceGroupScreen
+                                        }
+                                    }
                                 )
                             }
                         }
+
+                        Screen.AddApplianceGroupConvectors -> stateHolder.SaveableStateProvider(
+                            stateHolderKey
+                        ) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                ApplianceGroupScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    items = viewModel.applianceGroups.convectorScreen,
+                                    onItemClick = { item ->
+                                        navigateTo(Screen.ComingSoon)
+                                    }
+                                )
+                            }
+                        }
+
+                        Screen.AddApplianceGroupWaterHeaters -> stateHolder.SaveableStateProvider(
+                            stateHolderKey
+                        ) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                ApplianceGroupScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    items = viewModel.applianceGroups.waterHeaterScreen,
+                                    onItemClick = { item ->
+                                        navigateTo(Screen.ComingSoon)
+                                    }
+                                )
+                            }
+                        }
+
+                        Screen.ConvertorConvEcoCN04 -> TODO()
+                        Screen.ConvertorFinEcoCN06 -> TODO()
+                        Screen.ConvertorFloorEcoCN052 -> TODO()
+                        Screen.ConvertorHeatEcoCN03 -> TODO()
+                        Screen.ConvertorHeatEcoCN031 -> TODO()
+                        Screen.ConvertorLivEcoCN051 -> TODO()
+                        Screen.WaterHeaterBelliSlimoE31 -> TODO()
+                        Screen.WaterHeaterBelliSlimoLiteCloudE32 -> TODO()
+                        Screen.WaterHeaterBiLightCloudB15 -> TODO()
+                        Screen.WaterHeaterModEcoC21 -> TODO()
+                        Screen.WaterHeaterModEcoC22 -> TODO()
                     }
                 }
             }

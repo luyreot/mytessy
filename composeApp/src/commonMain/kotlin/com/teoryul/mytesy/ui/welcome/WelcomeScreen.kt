@@ -38,10 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.teoryul.mytesy.ui.common.RunOnce
-import com.teoryul.mytesy.ui.common.SafeImage
 import com.teoryul.mytesy.ui.common.AppImage
 import com.teoryul.mytesy.ui.common.LoadImageBitmap
+import com.teoryul.mytesy.ui.common.RunOnce
+import com.teoryul.mytesy.ui.common.SafeImage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -104,11 +104,11 @@ fun WelcomeScreen(
 
             if (!viewState.isLoading) {
                 OutlinedButton(
+                    modifier = Modifier.size(40.dp),
                     onClick = onLanguageClick,
                     shape = CircleShape,
                     border = BorderStroke(1.dp, Color(0xFFDDDDDD)),
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier.size(40.dp)
+                    contentPadding = PaddingValues(0.dp)
                 ) {
                     Text("EN")
                 }
@@ -171,11 +171,11 @@ fun WelcomeScreen(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 Button(
-                    onClick = onSignUpClick,
-                    shape = RoundedCornerShape(50),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
+                    onClick = onSignUpClick,
+                    shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF5E006C),
                         contentColor = Color.White
