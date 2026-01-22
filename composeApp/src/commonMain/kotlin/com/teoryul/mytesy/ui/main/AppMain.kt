@@ -252,7 +252,10 @@ fun AppMain(
 
                         is Screen.Settings -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
-                                SettingsScreen(stateHolderKey = stateHolderKey)
+                                SettingsScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    navigateToComingSoon = { navigateTo(Screen.ComingSoon) }
+                                )
                             }
                         }
 
