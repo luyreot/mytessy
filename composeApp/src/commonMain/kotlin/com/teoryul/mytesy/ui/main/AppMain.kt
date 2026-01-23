@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.teoryul.mytesy.domain.usecase.ApplianceGroupItem
 import com.teoryul.mytesy.ui.addappliance.AddApplianceScreen
+import com.teoryul.mytesy.ui.appliancedetail.ApplianceDetailScreen
 import com.teoryul.mytesy.ui.appliancegroup.ApplianceGroupScreen
 import com.teoryul.mytesy.ui.comingsoon.ComingSoonScreen
 import com.teoryul.mytesy.ui.common.AlertDialog
@@ -129,21 +130,35 @@ fun AppMain(
     Scaffold(
         topBar = {
             when (currentScreen) {
-                is Screen.Home -> CenterAlignedTopAppBar(
-                    title = { Text("Dashboard") }
-                )
+                Screen.Home -> CenterAlignedTopAppBar(title = { Text("Dashboard") })
 
-                is Screen.AddAppliance -> CenterAlignedTopAppBar(
-                    title = { Text("First steps") }
-                )
+                is Screen.ApplianceDetail -> {
+                    val title = currentScreen.appliance.shortName
+                        ?.takeIf { it.isNotBlank() }
+                        ?: "Modeco II" // TODO: Appliances endpoint does not return this string. Find from where can you get it.
+                    CenterAlignedTopAppBar(
+                        title = { Text(title) },
+                        navigationIcon = {
+                            Icon(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .clickable(onClick = { navigateBack() }),
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                                contentDescription = "Back"
+                            )
+                        }
+                    )
+                }
 
-                is Screen.AddApplianceChooseGroup,
-                is Screen.AddApplianceGroupConvectors,
-                is Screen.AddApplianceGroupWaterHeaters -> {
+                Screen.AddAppliance -> CenterAlignedTopAppBar(title = { Text("First steps") })
+
+                Screen.AddApplianceChooseGroup,
+                Screen.AddApplianceGroupConvectors,
+                Screen.AddApplianceGroupWaterHeaters -> {
                     val title = when (currentScreen) {
-                        is Screen.AddApplianceChooseGroup -> "Choose group"
-                        is Screen.AddApplianceGroupConvectors -> "Choose convector"
-                        is Screen.AddApplianceGroupWaterHeaters -> "Choose electric water heater"
+                        Screen.AddApplianceChooseGroup -> "Choose group"
+                        Screen.AddApplianceGroupConvectors -> "Choose convector"
+                        Screen.AddApplianceGroupWaterHeaters -> "Choose electric water heater"
                         else -> "Choose"
                     }
                     CenterAlignedTopAppBar(
@@ -160,12 +175,21 @@ fun AppMain(
                     )
                 }
 
-                is Screen.Notifications -> CenterAlignedTopAppBar(
-                    title = { Text("Notifications") }
-                )
+                Screen.Notifications -> CenterAlignedTopAppBar(title = { Text("Notifications") })
 
-                is Screen.Settings -> CenterAlignedTopAppBar(
-                    title = { Text("Settings") }
+                Screen.Settings -> CenterAlignedTopAppBar(title = { Text("Settings") })
+
+                Screen.ComingSoon -> CenterAlignedTopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        Icon(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .clickable(onClick = { navigateBack() }),
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                            contentDescription = "Back"
+                        )
+                    }
                 )
 
                 else -> {}
@@ -202,7 +226,7 @@ fun AppMain(
                     val viewModelStoreKey: String = screen::class.simpleName.toString()
                     val stateHolderKey = "tab:$viewModelStoreKey"
                     when (screen) {
-                        is Screen.Welcome -> WithScreenViewModelStore(key = viewModelStoreKey) {
+                        Screen.Welcome -> WithScreenViewModelStore(key = viewModelStoreKey) {
                             WelcomeScreen(
                                 onSignUpClick = { navigateTo(Screen.ComingSoon) },
                                 onSignInClick = { navigateTo(Screen.Login) },
@@ -211,7 +235,7 @@ fun AppMain(
                             )
                         }
 
-                        is Screen.Login -> WithScreenViewModelStore(key = viewModelStoreKey) {
+                        Screen.Login -> WithScreenViewModelStore(key = viewModelStoreKey) {
                             LoginScreen(
                                 onForgotPasswordClick = { navigateTo(Screen.ComingSoon) },
                                 onBackClick = { navigateBack() },
@@ -219,23 +243,35 @@ fun AppMain(
                             )
                         }
 
-                        is Screen.ComingSoon -> WithScreenViewModelStore(key = viewModelStoreKey) {
+                        Screen.ComingSoon -> WithScreenViewModelStore(key = viewModelStoreKey) {
                             ComingSoonScreen(onBackClick = { navigateBack() })
                         }
 
-                        is Screen.Home -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                        Screen.Home -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 HomeScreen(
                                     stateHolderKey = stateHolderKey,
                                     onAddApplianceClick = { navigateTo(Screen.AddAppliance) },
                                     onApplianceClick = { applianceEntity ->
-                                        // TODO: Implement appliance detail screen
+                                        navigateTo(Screen.ApplianceDetail(applianceEntity))
                                     }
                                 )
                             }
                         }
 
-                        is Screen.AddAppliance -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                        is Screen.ApplianceDetail -> stateHolder.SaveableStateProvider(
+                            stateHolderKey
+                        ) {
+                            WithRetainedTabViewModelStore(key = viewModelStoreKey) {
+                                ApplianceDetailScreen(
+                                    stateHolderKey = stateHolderKey,
+                                    appliance = screen.appliance,
+                                    onBackClick = { navigateBack() }
+                                )
+                            }
+                        }
+
+                        Screen.AddAppliance -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 AddApplianceScreen(
                                     stateHolderKey = stateHolderKey,
@@ -244,13 +280,13 @@ fun AppMain(
                             }
                         }
 
-                        is Screen.Notifications -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                        Screen.Notifications -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 NotificationsScreen(stateHolderKey = stateHolderKey)
                             }
                         }
 
-                        is Screen.Settings -> stateHolder.SaveableStateProvider(stateHolderKey) {
+                        Screen.Settings -> stateHolder.SaveableStateProvider(stateHolderKey) {
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 SettingsScreen(
                                     stateHolderKey = stateHolderKey,
