@@ -1,36 +1,39 @@
 package com.teoryul.mytesy.ui.navigation
 
 import androidx.compose.runtime.saveable.Saver
+import com.teoryul.mytesy.domain.appliance.ApplianceEntity
 
 sealed class Screen {
-    object Welcome : Screen()
-    object Login : Screen()
+    data object Welcome : Screen()
+    data object Login : Screen()
 
-    object Home : Screen()
-    object AddAppliance : Screen()
-    object Notifications : Screen()
-    object Settings : Screen()
+    data object Home : Screen()
+    data object AddAppliance : Screen()
+    data object Notifications : Screen()
+    data object Settings : Screen()
 
-    object ComingSoon : Screen()
+    data object ComingSoon : Screen()
 
-    object AddApplianceChooseGroup : Screen()
-    object AddApplianceGroupConvectors : Screen()
-    object AddApplianceGroupWaterHeaters : Screen()
+    data class ApplianceDetail(val appliance: ApplianceEntity) : Screen()
+
+    data object AddApplianceChooseGroup : Screen()
+    data object AddApplianceGroupConvectors : Screen()
+    data object AddApplianceGroupWaterHeaters : Screen()
 
     // Convertors
-    object ConvertorFinEcoCN06 : Screen()
-    object ConvertorHeatEcoCN031 : Screen()
-    object ConvertorLivEcoCN051 : Screen()
-    object ConvertorFloorEcoCN052 : Screen()
-    object ConvertorHeatEcoCN03 : Screen()
-    object ConvertorConvEcoCN04 : Screen()
+    data object ConvertorFinEcoCN06 : Screen()
+    data object ConvertorHeatEcoCN031 : Screen()
+    data object ConvertorLivEcoCN051 : Screen()
+    data object ConvertorFloorEcoCN052 : Screen()
+    data object ConvertorHeatEcoCN03 : Screen()
+    data object ConvertorConvEcoCN04 : Screen()
 
     // Water heaters
-    object WaterHeaterBiLightCloudB15 : Screen()
-    object WaterHeaterBelliSlimoLiteCloudE32 : Screen()
-    object WaterHeaterModEcoC21 : Screen()
-    object WaterHeaterModEcoC22 : Screen()
-    object WaterHeaterBelliSlimoE31 : Screen()
+    data object WaterHeaterBiLightCloudB15 : Screen()
+    data object WaterHeaterBelliSlimoLiteCloudE32 : Screen()
+    data object WaterHeaterModEcoC21 : Screen()
+    data object WaterHeaterModEcoC22 : Screen()
+    data object WaterHeaterBelliSlimoE31 : Screen()
 }
 
 val ScreenBackStackSaver: Saver<List<Screen>, List<String>> = Saver(

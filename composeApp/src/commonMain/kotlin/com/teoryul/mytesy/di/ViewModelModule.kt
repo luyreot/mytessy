@@ -1,5 +1,6 @@
 package com.teoryul.mytesy.di
 
+import com.teoryul.mytesy.ui.appliancedetail.ApplianceDetailViewModel
 import com.teoryul.mytesy.ui.home.HomeViewModel
 import com.teoryul.mytesy.ui.login.LoginViewModel
 import com.teoryul.mytesy.ui.main.AppMainViewModel
@@ -16,4 +17,5 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::NotificationsViewModel)
     viewModelOf(::SettingsViewModel)
+    viewModelOf(::ApplianceDetailViewModel)
 }
