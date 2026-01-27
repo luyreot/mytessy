@@ -132,6 +132,8 @@ fun AppMain(
             when (currentScreen) {
                 Screen.Home -> CenterAlignedTopAppBar(title = { Text("Dashboard") })
 
+                Screen.AddAppliance -> CenterAlignedTopAppBar(title = { Text("First steps") })
+
                 is Screen.ApplianceDetail -> {
                     val title = currentScreen.appliance.shortName
                         ?.takeIf { it.isNotBlank() }
@@ -149,8 +151,6 @@ fun AppMain(
                         }
                     )
                 }
-
-                Screen.AddAppliance -> CenterAlignedTopAppBar(title = { Text("First steps") })
 
                 Screen.AddApplianceChooseGroup,
                 Screen.AddApplianceGroupConvectors,
@@ -196,7 +196,7 @@ fun AppMain(
             }
         },
         bottomBar = {
-            if (currentScreen in BottomNavItem.Companion.items.map { it.screen }) {
+            if (currentScreen in BottomNavItem.items.map { it.screen }) {
                 BottomNavigationBar(
                     currentScreen = currentScreen,
                     onTabSelected = { tab ->
@@ -262,11 +262,13 @@ fun AppMain(
                         is Screen.ApplianceDetail -> stateHolder.SaveableStateProvider(
                             stateHolderKey
                         ) {
+                            // TODO
+                            // do not use WithRetainedTabViewModelStore for nested screens
+                            // to avoid going back to the home screen on screen rotation changes
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 ApplianceDetailScreen(
                                     stateHolderKey = stateHolderKey,
-                                    appliance = screen.appliance,
-                                    onBackClick = { navigateBack() }
+                                    applianceId = screen.appliance.id.orEmpty()
                                 )
                             }
                         }

@@ -64,4 +64,10 @@ private fun getImageResId(image: AppImage): Int = when (image) {
     AppImage.WaterHeaterBiLightCloudB15Icon -> R.drawable.ic_waterh_bi_light_cloud_b15
     AppImage.WaterHeaterModEcoC21Icon -> R.drawable.ic_waterh_mod_eco_c21
     AppImage.WaterHeaterModEcoC22Icon -> R.drawable.ic_waterh_mod_eco_c22
+
+    AppImage.HeatIcon -> R.drawable.ic_heat
+    AppImage.LeafIcon -> R.drawable.ic_leaf
+    AppImage.TwoLeavesIcon -> R.drawable.ic_two_leaves
+    AppImage.ThreeLeavesIcon -> R.drawable.ic_three_leaves
+    AppImage.PalmTreesIcon -> R.drawable.ic_palm_trees
 }

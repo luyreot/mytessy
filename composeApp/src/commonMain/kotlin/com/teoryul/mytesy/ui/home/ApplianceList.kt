@@ -50,6 +50,7 @@ import com.teoryul.mytesy.domain.appliance.ApplianceEntity
 import com.teoryul.mytesy.ui.common.AppImage
 import com.teoryul.mytesy.ui.common.LoadImageBitmap
 import com.teoryul.mytesy.ui.common.SafeImage
+import com.teoryul.mytesy.ui.helper.getProgram
 import kotlin.math.roundToInt
 
 @Composable
@@ -80,6 +81,7 @@ fun ApplianceList(
     }
 }
 
+// TODO show UI indication that the current data is old (form db), is being updated from api
 @Composable
 private fun ApplianceCard(
     appliance: ApplianceEntity,
@@ -179,7 +181,7 @@ private fun ApplianceOnlineContent(
 ) {
     val currentTemp = appliance.statusTmpC?.toDoubleOrNull()
     val powerOn = (appliance.statusPwr == "1")
-    val modeLabel = modeLabelFrom(appliance)
+    val modeLabel = getProgram(appliance)
     val statusText = (appliance.statusText ?: "").ifBlank { "--" }
     val isHeating = statusText.equals("heating", true)
     val targetTempLabel =
@@ -256,7 +258,7 @@ private fun ApplianceOnlineContent(
             LabeledValueRow(
                 label = "CURRENT MODE",
                 icon = Icons.Default.TouchApp,
-                value = modeLabel,
+                value = modeLabel.labelLong,
                 valueColor = Color(0xFF3CAF3D),
                 enabled = powerOn
             )
@@ -406,19 +408,5 @@ private fun ApplianceOfflineContent() {
             style = MaterialTheme.typography.titleMedium,
             color = Color(0xFFeb445a)
         )
-    }
-}
-
-// ---------- HELPERS ----------
-
-private fun modeLabelFrom(appliance: ApplianceEntity): String {
-    // Best-effort label from available fields.
-    // If you later have a strict mapping, plug it here.
-    return when (appliance.statusMode) {
-        "0" -> "Manual"
-        "1" -> "Program P1"
-        "2" -> "Program P2"
-        "3" -> "Program P3"
-        else -> "Undefined"
     }
 }
