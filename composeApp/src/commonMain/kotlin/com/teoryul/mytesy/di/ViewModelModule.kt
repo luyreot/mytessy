@@ -7,6 +7,7 @@ import com.teoryul.mytesy.ui.main.AppMainViewModel
 import com.teoryul.mytesy.ui.notifications.NotificationsViewModel
 import com.teoryul.mytesy.ui.settings.SettingsViewModel
 import com.teoryul.mytesy.ui.welcome.WelcomeViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -17,5 +18,7 @@ val viewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::NotificationsViewModel)
     viewModelOf(::SettingsViewModel)
-    viewModelOf(::ApplianceDetailViewModel)
+    viewModel { (applianceId: String) ->
+        ApplianceDetailViewModel(get(), applianceId)
+    }
 }

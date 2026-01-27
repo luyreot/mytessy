@@ -23,5 +23,11 @@ enum class AppImage(val contentDescription: String) {
     WaterHeaterBelliSlimoLiteCloudE32Icon("WaterHeaterBelliSlimoLiteCloudE32"),
     WaterHeaterBiLightCloudB15Icon("WaterHeaterBiLightCloudB15"),
     WaterHeaterModEcoC21Icon("WaterHeaterModEcoC21"),
-    WaterHeaterModEcoC22Icon("WaterHeaterModEcoC22")
+    WaterHeaterModEcoC22Icon("WaterHeaterModEcoC22"),
+
+    HeatIcon("HeatIcon"),
+    LeafIcon("LeafIcon"),
+    TwoLeavesIcon("TwoLeavesIcon"),
+    ThreeLeavesIcon("ThreeLeavesIcon"),
+    PalmTreesIcon("PalmTreesIcon")
 }
