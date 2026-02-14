@@ -53,7 +53,12 @@ fun RowScope.EcoModesQuickAction(
             imageModifier = Modifier.size(24.dp),
             contentScale = ContentScale.Fit,
             contentDescription = selectedEcoMode.icon.contentDescription,
-            colorFilter = ColorFilter.tint(Color(0xFF8DC63F)),
+            colorFilter = ColorFilter.tint(
+                if (selectedEcoMode == EcoMode.Off)
+                    Color.Gray
+                else
+                    Color(0xFF8DC63F)
+            ),
             fallbackContent = {}
         )
         Spacer(Modifier.height(4.dp))
