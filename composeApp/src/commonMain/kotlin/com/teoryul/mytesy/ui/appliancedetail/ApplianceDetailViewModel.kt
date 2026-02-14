@@ -70,6 +70,18 @@ class ApplianceDetailViewModel(
         }
     }
 
+    fun onDismissEcoModesMenu() {
+        _uiState.update { it.copy(ecoModesExpanded = false) }
+    }
+
+    fun onInfoMenuClick() {
+        _uiState.update { it.copy(infoMenuExpanded = !it.infoMenuExpanded) }
+    }
+
+    fun onDismissInfoMenu() {
+        _uiState.update { it.copy(infoMenuExpanded = false) }
+    }
+
     fun onEcoModeSelected(mode: EcoMode) {
         if (_uiState.value.selectedEcoMode == mode) return
 
@@ -104,9 +116,5 @@ class ApplianceDetailViewModel(
         viewModelScope.launch {
             _events.emit(UiEvent.Toast(message))
         }
-    }
-
-    fun onDismissModesMenu() {
-        _uiState.update { it.copy(ecoModesExpanded = false) }
     }
 }

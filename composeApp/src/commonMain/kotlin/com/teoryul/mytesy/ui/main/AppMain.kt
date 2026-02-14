@@ -268,7 +268,8 @@ fun AppMain(
                             WithRetainedTabViewModelStore(key = viewModelStoreKey) {
                                 ApplianceDetailScreen(
                                     stateHolderKey = stateHolderKey,
-                                    applianceId = screen.appliance.id.orEmpty()
+                                    applianceId = screen.appliance.id.orEmpty(),
+                                    navigateToComingSoon = { navigateTo(Screen.ComingSoon) }
                                 )
                             }
                         }

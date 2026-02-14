@@ -25,7 +25,8 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ApplianceDetailScreen(
     stateHolderKey: String,
-    applianceId: String
+    applianceId: String,
+    navigateToComingSoon: () -> Unit
 ) {
     val viewModel: ApplianceDetailViewModel = koinViewModel(
         key = stateHolderKey, // TODO do I need this?
@@ -42,7 +43,8 @@ fun ApplianceDetailScreen(
 
     DisposableEffect(stateHolderKey) {
         onDispose {
-            viewModel.onDismissModesMenu()
+            viewModel.onDismissEcoModesMenu()
+            viewModel.onDismissInfoMenu()
         }
     }
 
@@ -82,7 +84,16 @@ fun ApplianceDetailScreen(
             expanded = uiState.ecoModesExpanded,
             isSelectedEcoMode = uiState.selectedEcoMode != EcoMode.Off,
             onSelect = viewModel::onEcoModeSelected,
-            onDismiss = viewModel::onDismissModesMenu
+            onDismiss = viewModel::onDismissEcoModesMenu
+        )
+
+        InfoMenuPopup(
+            expanded = uiState.infoMenuExpanded,
+            onDismiss = viewModel::onDismissInfoMenu,
+            onItemClick = { item ->
+                // TODO implement each screen
+                navigateToComingSoon()
+            }
         )
 
         // TODO hook up boolean all flags
@@ -129,7 +140,7 @@ fun ApplianceDetailScreen(
                 label = "Info",
                 isEnabled = true,
                 isActive = false,
-                onClick = { viewModel.emitToastMessage("Coming Soon") }
+                onClick = { viewModel.onInfoMenuClick() }
             )
         }
     }
