@@ -15,5 +15,5 @@ This is a Kotlin Multiplatform project targeting Android, iOS.
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
 
-The project itself is supposed to be a modenized clone of an IoT application called MyTessy for controlling 
-various types of electricnboilers, heaters and other home appliances.
+The project itself has been created as a modernized clone of an IoT application for controlling 
+various types of electric boilers, heaters and other home appliances.
