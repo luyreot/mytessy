@@ -44,11 +44,11 @@ import com.teoryul.mytesy.ui.common.SafeImage
 
 @Composable
 fun EcoModesPopup(
+    modifier: Modifier = Modifier,
     expanded: Boolean,
     isSelectedEcoMode: Boolean,
     onSelect: (EcoMode) -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     bottomBarHeight: Dp = 64.dp,
     horizontalPadding: Dp = 4.dp,
     popupVerticalGap: Dp = 4.dp

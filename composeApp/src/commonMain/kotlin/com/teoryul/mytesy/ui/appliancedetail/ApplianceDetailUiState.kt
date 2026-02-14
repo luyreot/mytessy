@@ -9,5 +9,6 @@ data class ApplianceDetailUiState(
     val appliance: ApplianceEntity? = null,
     val ecoModesExpanded: Boolean = false,
     val selectedEcoMode: EcoMode = EcoMode.Off,
-    val isEcoModeUpdating: Boolean = false
+    val isEcoModeUpdating: Boolean = false,
+    val infoMenuExpanded: Boolean = false
 )
