@@ -71,4 +71,10 @@ private fun getImageName(image: AppImage): String = when (image) {
     AppImage.WaterHeaterBiLightCloudB15Icon -> "WaterHeaterBiLightCloudB15"
     AppImage.WaterHeaterModEcoC21Icon -> "WaterHeaterModEcoC21"
     AppImage.WaterHeaterModEcoC22Icon -> "WaterHeaterModEcoC22"
+
+    AppImage.HeatIcon -> "HeatIcon"
+    AppImage.LeafIcon -> "LeafIcon"
+    AppImage.TwoLeavesIcon -> "TwoLeavesIcon"
+    AppImage.ThreeLeavesIcon -> "ThreeLeavesIcon"
+    AppImage.PalmTreesIcon -> "PalmTreesIcon"
 }
