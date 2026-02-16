@@ -63,6 +63,11 @@ class ApplianceDetailViewModel(
         // TODO make api call to update the program
     }
 
+    fun onToggleProgramClick() {
+        // TODO make api call to activate/deactivate program
+        emitToastMessage("Coming Soon")
+    }
+
     fun onEcoModesClick() {
         _uiState.update {
             if (it.isEcoModeUpdating) it
