@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,12 +24,14 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.teoryul.mytesy.ui.common.showToast
-import com.teoryul.mytesy.ui.helper.ApplianceProgramMode
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -68,9 +69,9 @@ fun ApplianceDetailScreen(
     val statusText = (uiState.appliance?.statusText ?: "").ifBlank { "--" }
     val isHeating = statusText.equals("heating", true)
 
-    val isViewingManualProgram = uiState.selectedProgram == ApplianceProgramMode.Manual
-    val isViewingActiveProgram = uiState.selectedProgram == uiState.activeProgram
-    val activateLabel = if (isViewingActiveProgram) "Deactivate" else "Activate"
+    val activateLabel = if (uiState.isViewingActiveProgram()) "Deactivate" else "Activate"
+
+    var p by rememberSaveable { mutableFloatStateOf(0.35f) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -87,24 +88,25 @@ fun ApplianceDetailScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 48.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically)
             ) {
                 TemperatureCenter(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxSize(),
                     currentTemp = currentTemp,
                     targetTemp = targetTemp,
                     isPowerOn = isPowerOn,
                     statusText = statusText,
-                    isHeating = isHeating
+                    isHeating = isHeating,
+                    isManualProgramEnabled = uiState.isManualProgramEnabled(),
+                    isViewingActiveProgram = uiState.isViewingActiveProgram(),
+                    onTargetTempChange = { viewModel.onTargetTempChange(it) }
                 )
 
-                Spacer(Modifier.height(12.dp))
-
                 ProgramActionButtons(
-                    isViewingManualProgram = isViewingManualProgram,
+                    isViewingManualProgram = uiState.isViewingManualProgram(),
                     activateLabel = activateLabel,
                     onToggleProgramClick = {
                         viewModel.onToggleProgramClick()
@@ -155,7 +157,7 @@ fun ApplianceDetailScreen(
                 )
             }
         }
-        
+
         EcoModesPopup(
             expanded = uiState.ecoModesExpanded,
             isSelectedEcoMode = uiState.selectedEcoMode != EcoMode.Off,
@@ -176,19 +178,23 @@ fun ApplianceDetailScreen(
 
 @Composable
 private fun ProgramActionButtons(
+    modifier: Modifier = Modifier,
     isViewingManualProgram: Boolean,
     activateLabel: String,
     onToggleProgramClick: () -> Unit,
     onEditProgramClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(
+            if (isViewingManualProgram) 0.5f else 1.0f
+        ),
         horizontalArrangement = if (isViewingManualProgram)
             Arrangement.Center
         else
             Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // TODO add loader into the button
         Button(
             modifier = Modifier.weight(1f),
             onClick = onToggleProgramClick,

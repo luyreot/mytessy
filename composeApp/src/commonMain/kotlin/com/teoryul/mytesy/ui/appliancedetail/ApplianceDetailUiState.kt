@@ -11,4 +11,11 @@ data class ApplianceDetailUiState(
     val selectedEcoMode: EcoMode = EcoMode.Off,
     val isEcoModeUpdating: Boolean = false,
     val infoMenuExpanded: Boolean = false
-)
+) {
+
+    fun isViewingManualProgram() = selectedProgram == ApplianceProgramMode.Manual
+
+    fun isViewingActiveProgram() = selectedProgram == activeProgram
+
+    fun isManualProgramEnabled() = activeProgram == ApplianceProgramMode.Manual
+}
