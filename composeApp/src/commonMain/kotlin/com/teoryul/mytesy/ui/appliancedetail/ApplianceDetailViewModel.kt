@@ -68,6 +68,11 @@ class ApplianceDetailViewModel(
         emitToastMessage("Coming Soon")
     }
 
+    fun onTargetTempChange(newTargetTemp: Float) {
+        // TODO make api call to update the target temp of the appliance
+        _uiState.update { it.copy(appliance = it.appliance?.copy(statusTmpR = newTargetTemp.toString())) }
+    }
+
     fun onEcoModesClick() {
         _uiState.update {
             if (it.isEcoModeUpdating) it
